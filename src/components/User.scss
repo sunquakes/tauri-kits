@@ -1,0 +1,56 @@
+.user-page {
+  .page-header {
+    margin-bottom: 24px;
+    
+    .page-title {
+      margin: 0 0 8px;
+      font-weight: 600;
+    }
+  }
+  
+  .stats-row {
+    margin-bottom: 24px;
+    
+    .stat-card {
+      border-radius: 12px;
+      border: none;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+    }
+  }
+  
+  .search-card {
+    margin-bottom: 16px;
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    
+    .search-actions {
+      margin-top: 8px;
+      padding-top: 16px;
+      border-top: 1px solid #f0f0f0;
+    }
+  }
+  
+  .table-card {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    
+    .ant-table {
+      .ant-table-thead > tr > th {
+        background: #fafafa;
+        font-weight: 600;
+      }
+    }
+    
+    .ant-pagination {
+      margin-top: 24px;
+    }
+  }
+}

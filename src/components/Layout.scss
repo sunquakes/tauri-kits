@@ -1,0 +1,31 @@
+.main-layout {
+  background: #f0f2f5;
+  min-height: 100vh;
+  
+  .layout-sider {
+    background: #001529;
+    border-right: 0;
+    
+    &.ant-layout-sider-dark {
+      background: #001529;
+    }
+  }
+  
+  .layout-content {
+    background: #f0f2f5;
+    min-height: 100vh;
+  }
+  
+  .layout-main-content {
+    margin: 24px 24px 0;
+    background: #f0f2f5;
+    
+    .page-wrapper {
+      padding: 24px;
+      background: #ffffff;
+      border-radius: 12px;
+      min-height: calc(100vh - 200px);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+  }
+}

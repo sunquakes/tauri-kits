@@ -1,0 +1,3 @@
+rule:
+  enable: true
+  local_rules: true

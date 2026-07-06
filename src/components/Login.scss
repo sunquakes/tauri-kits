@@ -1,0 +1,218 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.login-container {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.login-row {
+  height: 100vh;
+  
+  .left-panel {
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    
+    .brand-content {
+      color: white;
+      max-width: 500px;
+      
+      .logo-area {
+        margin-bottom: 60px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        
+        .logo-icon {
+          font-size: 64px;
+          color: rgba(255, 255, 255, 0.95);
+        }
+        
+        .brand-title {
+          color: white;
+          font-weight: 700;
+          margin: 0;
+        }
+      }
+      
+      .brand-desc {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 18px;
+        line-height: 1.8;
+        margin-bottom: 60px;
+      }
+      
+      .feature-list {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        
+        .feature-item {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          
+          .feature-icon {
+            font-size: 36px;
+            color: rgba(255, 255, 255, 0.9);
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+          }
+          
+          .feature-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            
+            strong {
+              color: white;
+              font-size: 16px;
+            }
+            
+            span {
+              font-size: 14px;
+              opacity: 0.7;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .right-panel {
+    height: 100vh;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+      
+      .login-header {
+        text-align: center;
+        margin-bottom: 40px;
+        
+        .login-title {
+          margin-bottom: 8px;
+          color: #1f1f1f;
+        }
+      }
+      
+      .login-form {
+        .form-options {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 8px;
+          
+          .forgot-link {
+            color: #667eea;
+            text-decoration: none;
+            transition: color 0.2s;
+            
+            &:hover {
+              color: #764ba2;
+            }
+          }
+        }
+        
+        .login-btn {
+          height: 44px;
+          font-size: 16px;
+          font-weight: 600;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border: none;
+          
+          &:hover {
+            opacity: 0.9;
+          }
+        }
+        
+        .register-btn {
+          height: 44px;
+          font-size: 16px;
+          color: #667eea;
+          border-color: #667eea;
+          
+          &:hover {
+            color: #764ba2 !important;
+            border-color: #764ba2 !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1400px) {
+  .login-row {
+    .left-panel {
+      padding: 40px;
+      
+      .brand-content {
+        .logo-area {
+          .logo-icon {
+            font-size: 48px;
+          }
+          
+          .brand-title {
+            font-size: 32px !important;
+          }
+        }
+        
+        .brand-desc {
+          font-size: 16px;
+          margin-bottom: 40px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .login-row {
+    .left-panel {
+      display: none;
+    }
+    
+    .right-panel {
+      span.ant-col {
+        flex: 1 !important;
+        max-width: 100% !important;
+      }
+      
+      .login-card {
+        padding: 20px;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .login-row {
+    .right-panel {
+      padding: 16px;
+    }
+    
+    .login-card {
+      max-width: 100% !important;
+    }
+  }
+}
