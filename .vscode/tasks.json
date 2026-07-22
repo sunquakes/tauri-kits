@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "ui:dev",
+      "type": "shell",
+      "command": "cmd",
+      "args": ["/c", "pnpm install && pnpm dev"],
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "fileLocation": "absolute",
+        "pattern": {
+          "regexp": "^ERROR"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*VITE.*ready",
+          "endsPattern": "^.*Local:.*http"
+        }
+      }
+    },
+    {
+      "label": "ui:build",
+      "type": "shell",
+      "command": "cmd",
+      "args": ["/c", "pnpm install && pnpm build"],
+      "problemMatcher": []
+    }
+  ]
+}

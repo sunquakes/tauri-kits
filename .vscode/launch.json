@@ -1,0 +1,58 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    // 1. 开发模式调试（最常用）
+    {
+      "name": "Tauri Dev Debug",
+      "type": "lldb",
+      "request": "launch",
+      "cargo": {
+        "args": [
+          "run",
+          "--manifest-path",
+          "./src-tauri/Cargo.toml",
+          "--no-default-features"
+        ]
+      },
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "TAURI_DEBUG": "true"
+      },
+      "sourceLanguages": ["rust"],
+      "preLaunchTask": "ui:dev" // 启动前端 dev server
+    },
+
+    // 2. 生产模式调试（release 构建）
+    {
+      "name": "Tauri Release Debug",
+      "type": "lldb",
+      "request": "launch",
+      "cargo": {
+        "args": [
+          "run",
+          "--release",
+          "--manifest-path",
+          "./src-tauri/Cargo.toml"
+        ]
+      },
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "TAURI_DEBUG": "false"
+      },
+      "sourceLanguages": ["rust"],
+      "preLaunchTask": "ui:build"
+    },
+
+    // 3. 附加到已运行进程（调试已启动的 tauri dev）
+    {
+      "name": "Tauri Attach Debug",
+      "type": "lldb",
+      "request": "attach",
+      "pid": "${command:pickProcess}",
+      "sourceMap": {
+        "sourceMapMode": "auto"
+      },
+      "sourceLanguages": ["rust"]
+    }
+  ]
+}
