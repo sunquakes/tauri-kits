@@ -1,13 +1,598 @@
-Tauri Kits - Project Maintainers & Contributors
-==============================================
+# AGENTS
 
-Maintainer
-----------
+Guidance for AI coding agents working on the `tauri-kits` codebase.
+This document describes the project layout, conventions, and the
+end-to-end workflow for adding a new business module.
+
+---
+
+## 1. Project Overview
+
+`tauri-kits` is a Tauri 2 desktop starter kit:
+
+- Frontend: React 19 + TypeScript + Vite 7 + Ant Design 6
+- State / Routing: React Router 7, lightweight React Context store
+- i18n: i18next (`src/lang/en.ts`, `src/lang/zh.ts`)
+- Backend: Rust in `src-tauri/`, SQLite via `sqlx`
+- IPC: `@tauri-apps/api/core` `invoke()` calling `#[tauri::command]` functions
+
+Reference module: `user` (page, form, API file, Rust commands, DB init).
+
+---
+
+## 2. Conventions
+
+### Naming
+
+- Frontend module directory: `src/components/<module>/` (all module files inside,
+  including the page component as `index.tsx`).
+- Frontend API file: `src/api/<module>.ts` (lowercase, one file per module).
+- Frontend store file: `src/store/<module>.ts` (one file per module).
+- Rust module file: `src-tauri/src/api/<module>.rs` (one file per module,
+  never append new commands to `api.rs`).
+- Rust commands: `api_<module>_<action>` (snake_case), e.g. `api_product_list`.
+- Database table: singular snake_case, e.g. `user`, `product_category`.
+- Route path: `/<module>` (kebab-case), e.g. `/user`, `/order-item`.
+- i18n keys: grouped by feature, see `src/lang/en.ts` and `src/lang/zh.ts`.
+
+### IPC response shape
+
+Every Rust command returns:
+
+```rust
+pub struct ApiResponse<T> {
+    pub code: i32,        // 200 = success
+    pub message: String,
+    pub data: Option<T>,
+}
+```
+
+The frontend wraps `invoke()` and throws on non-200 codes (see
+[src/api/user.ts](file:///e:/ruixinglong/tauri-kits/src/api/user.ts)).
+
+### Styling
+
+- One SCSS file per page: `<Module>.scss` co-located with the page component.
+- Use the existing class layout: `.page-header`, `.stats-row`, `.search-card`,
+  `.table-card` for visual consistency.
+
+### i18n
+
+- All user-visible strings must go through `t('...')` from `react-i18next`.
+- Add keys to BOTH `src/lang/en.ts` and `src/lang/zh.ts`.
+
+---
+
+## 3. Adding a New Module — Step-by-Step
+
+This example uses `product` as the module name. Replace with your own.
+
+### Step 1 — Create the module's Rust file with DB init
+
+Create a new file at
+[src-tauri/src/api/product.rs](file:///e:/ruixinglong/tauri-kits/src-tauri/src/api/)
+(one file per module — do NOT append to `api.rs`).
+
+The module file owns:
+- its table DDL (in an `api_<module>_init` command),
+- its struct,
+- its CRUD commands.
+
+```rust
+// src-tauri/src/api/product.rs
+use serde::{Deserialize, Serialize};
+use sqlx::Row;
+use tauri::AppHandle;
+
+use super::{ApiResponse, PageResponse, get_db_pool};
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Product {
+    pub id: Option<i64>,
+    pub name: String,
+    pub price: f64,
+    pub state: i32,
+    pub create_time: Option<String>,
+    pub update_time: Option<String>,
+}
+
+#[tauri::command]
+pub async fn api_product_init(app_handle: AppHandle) -> ApiResponse<String> {
+    match get_db_pool(&app_handle).await {
+        Ok(pool) => {
+            let sql = r#"
+                CREATE TABLE IF NOT EXISTS product (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    price REAL NOT NULL DEFAULT 0,
+                    state INTEGER DEFAULT 1,
+                    create_time TEXT,
+                    update_time TEXT
+                );
+            "#;
+            match sqlx::query(sql).execute(&pool).await {
+                Ok(_) => ApiResponse::success("product table ready".to_string()),
+                Err(e) => ApiResponse::error(500, &format!("Failed to create table: {}", e)),
+            }
+        }
+        Err(e) => ApiResponse::error(500, &format!("Failed to connect to database: {}", e)),
+    }
+}
+```
+
+Rules:
+
+- Always `CREATE TABLE IF NOT EXISTS`.
+- Include `id`, `create_time`, `update_time` for consistency.
+- Use `TEXT` for timestamps (formatted as `YYYY-MM-DD HH:MM:SS` via `chrono`).
+- Each module owns its own `api_<module>_init` command — never inline DDL
+  into the shared `api_db_init`.
+
+### Step 2 — Add CRUD commands in the same module file
+
+Continue in
+[src-tauri/src/api/product.rs](file:///e:/ruixinglong/tauri-kits/src-tauri/src/api/)
+with the CRUD commands:
+
+```rust
+#[tauri::command]
+pub async fn api_product_list(
+    page: i64,
+    page_size: i64,
+    app_handle: AppHandle,
+) -> ApiResponse<PageResponse<Product>> {
+    // Mirror api_user_list: COUNT + SELECT LIMIT/OFFSET
+}
+
+#[tauri::command]
+pub async fn api_product_get(id: i64, app_handle: AppHandle) -> ApiResponse<Product> { ... }
+
+#[tauri::command]
+pub async fn api_product_create(product: Product, app_handle: AppHandle) -> ApiResponse<i64> { ... }
+
+#[tauri::command]
+pub async fn api_product_update(id: i64, product: Product, app_handle: AppHandle) -> ApiResponse<i64> { ... }
+
+#[tauri::command]
+pub async fn api_product_delete(id: i64, app_handle: AppHandle) -> ApiResponse<i64> { ... }
+```
+
+Conventions:
+
+- Reuse `get_db_pool(&app_handle).await` (re-exported from `api.rs` via
+  `use super::...`) for the SQLite connection.
+- Hash passwords with `Md5`; do NOT return the password hash to the frontend
+  (set `password: "".to_string()` in the response struct).
+- Format timestamps with `chrono::Local::now().format("%Y-%m-%d %H:%M:%S")`.
+
+### Step 3 — Register the module and its commands
+
+#### 3a. Declare the submodule in `src-tauri/src/api.rs`
+
+Edit [src-tauri/src/api.rs](file:///e:/ruixinglong/tauri-kits/src-tauri/src/api.rs)
+to expose shared types and add a `pub mod` declaration:
+
+```rust
+// src-tauri/src/api.rs
+pub mod product;   // <-- new module
+
+// Shared helpers remain here, reusable by all submodules
+pub use self::shared::*;
+
+mod shared {
+    use sqlx::{sqlite::SqliteConnectOptions, SqlitePool};
+    use tauri::{AppHandle, Manager};
+
+    pub async fn get_db_pool(app_handle: &AppHandle) -> Result<SqlitePool, String> { ... }
+}
+
+// Shared response types stay here
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ApiResponse<T> { ... }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PageResponse<T> { ... }
+```
+
+> If `api.rs` currently holds an existing module's code (e.g. `user`),
+> prefer extracting it into `api/user.rs` at the same time, leaving only
+> shared types and the `get_db_pool` helper in `api.rs`.
+
+#### 3b. Wire the handlers in `src-tauri/src/lib.rs`
+
+Update [src-tauri/src/lib.rs](file:///e:/ruixinglong/tauri-kits/src-tauri/src/lib.rs)
+and reference each command by its fully-qualified path:
+
+```rust
+.invoke_handler(tauri::generate_handler![
+    api::api_user_login,
+    api::api_user_list,
+    // ... existing handlers
+    api::product::api_product_init,
+    api::product::api_product_list,
+    api::product::api_product_get,
+    api::product::api_product_create,
+    api::product::api_product_update,
+    api::product::api_product_delete
+])
+```
+
+#### 3c. Call the module init from `api_db_init`
+
+In [src-tauri/src/api.rs](file:///e:/ruixinglong/tauri-kits/src-tauri/src/api.rs),
+have `api_db_init` delegate to each module's own init command instead of
+inlining DDL:
+
+```rust
+#[tauri::command]
+pub async fn api_db_init(app_handle: AppHandle) -> ApiResponse<String> {
+    // Existing user init (or api::user::api_user_init) ...
+    // Then delegate to the new module:
+    product::api_product_init(app_handle.clone()).await;
+    ApiResponse::success("Database initialized".to_string())
+}
+```
+
+### Step 4 — Create the frontend API file
+
+Each module MUST have its own dedicated API file at
+`src/api/<module>.ts`. Never put a module's `invoke()` calls inside
+`src/api/request.ts`, `src/api/db.ts`, or any other shared file —
+those are reserved for cross-module helpers.
+
+File layout:
+
+```
+src/api/
+├── request.ts     # generic DB helpers (db_execute, db_page, ...) — shared
+├── db.ts          # app-level DB init only
+└── <module>.ts    # one file per business module
+```
+
+Create [src/api/product.ts](file:///e:/ruixinglong/tauri-kits/src/api/) following
+the pattern in [src/api/user.ts](file:///e:/ruixinglong/tauri-kits/src/api/user.ts):
+
+```ts
+import { invoke } from '@tauri-apps/api/core'
+
+interface ApiResponse<T> {
+  code: number
+  message: string
+  data: T | null
+}
+
+interface PageResponse<T> {
+  current: number
+  page_size: number
+  total: number
+  records: T[]
+}
+
+export async function pageList(current: number, pageSize: number): Promise<any> {
+  const result = await invoke<ApiResponse<PageResponse<any>>>('api_product_list', { page: current, pageSize })
+  if (result.code !== 200) throw new Error(result.message)
+  const data = result.data
+  return {
+    current: data?.current || current,
+    pageSize: data?.page_size || pageSize,
+    total: data?.total || 0,
+    records: data?.records || []
+  }
+}
+
+export async function del(where: any[][]): Promise<any> { /* invoke api_product_delete */ }
+export async function edit(id: number, data: any): Promise<any> { /* invoke api_product_update */ }
+export async function add(data: any): Promise<any> { /* invoke api_product_create */ }
+```
+
+Rules:
+
+- One file per module. The file name matches the Rust module name
+  (`product.ts` <-> `api/product.rs`).
+- Only this file may call `invoke('api_product_*', ...)`. Page components
+  import from here instead of invoking directly.
+- Shared `ApiResponse<T>` / `PageResponse<T>` interfaces may be duplicated
+  per file (matches the existing `user.ts` style) OR extracted into
+  `src/api/types.ts` later — do NOT mix them into `request.ts`.
+- The `invoke` argument names must match the Rust parameter names
+  (Tauri converts `snake_case` Rust params from `camelCase` JS keys, e.g.
+  `page_size` -> `pageSize`). When passing a struct, the JS key must match
+  the Rust parameter name exactly (e.g. `{ product: data }` for `product: Product`).
+
+### Step 5 — Create the frontend page
+
+Each module gets its own dedicated directory under `src/components/<module>/`.
+All module files (page component, form component, styles) live inside this folder.
+
+Directory layout:
+
+```
+src/components/
+├── layout/          # shared layout components (header, menu, footer, etc.)
+├── chart/           # shared chart components
+├── Dashboard.tsx    # shared dashboard page
+├── Chart.tsx        # shared chart page
+├── Login.tsx        # shared login page
+└── product/         # <-- new module directory
+    ├── index.tsx    # main page (search + stats + table)
+    ├── index.scss   # styles
+    └── Form.tsx     # add/edit drawer
+```
+
+Create [src/components/product/index.tsx](file:///e:/ruixinglong/tauri-kits/src/components/)
+as the main page component, mirroring
+[src/components/User.tsx](file:///e:/ruixinglong/tauri-kits/src/components/User.tsx):
+
+```tsx
+// src/components/product/index.tsx
+import { useState, useEffect } from 'react'
+import { Form, Row, Col, Input, Button, Table, Popconfirm, message, Card, Space, Typography, Tag } from 'antd'
+import { PlusOutlined, SearchOutlined, ReloadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
+import { pageList, del } from '../../api/product'
+import ProductForm from './Form'
+import './index.scss'
+```
+
+Required in the page:
+
+- `useTranslation()` for all labels.
+- A search `<Form>` with a `parseWhere()` helper returning `string[][]`.
+- An Ant Design `<Table>` with pagination wired to `pageList`.
+- Statistic cards following the `.stats-row` layout.
+- A `<Drawer>` form for create/edit, following
+  [src/components/user/Form.tsx](file:///e:/ruixinglong/tauri-kits/src/components/user/Form.tsx).
+
+### Step 6 — Create the module store
+
+Each module may have its own state management file at `src/store/<module>.ts`.
+This isolates module-specific state from the global `src/store/index.tsx`,
+which should only contain app-wide concerns like authentication.
+
+File layout:
+
+```
+src/store/
+├── index.tsx        # global app state (auth user, theme, etc.)
+├── store.ts         # shared context utilities
+└── <module>.ts      # one file per business module
+```
+
+Create [src/store/product.ts](file:///e:/ruixinglong/tauri-kits/src/store/):
+
+```ts
+// src/store/product.ts
+import { createContext, useContext, useState, ReactNode, useCallback } from 'react'
+
+interface ProductState {
+  selectedIds: number[]
+}
+
+interface ProductStoreType {
+  state: ProductState
+  setSelectedIds: (ids: number[]) => void
+  toggleSelect: (id: number) => void
+}
+
+const ProductContext = createContext<ProductStoreType | undefined>(undefined)
+
+export function ProductProvider({ children }: { children: ReactNode }) {
+  const [selectedIds, setSelectedIds] = useState<number[]>([])
+
+  const toggleSelect = useCallback((id: number) => {
+    setSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    )
+  }, [])
+
+  return (
+    <ProductContext.Provider value={{ state: { selectedIds }, setSelectedIds, toggleSelect }}>
+      {children}
+    </ProductContext.Provider>
+  )
+}
+
+export function useProductStore() {
+  const context = useContext(ProductContext)
+  if (context === undefined) {
+    throw new Error('useProductStore must be used within a ProductProvider')
+  }
+  return context
+}
+```
+
+Rules:
+
+- Module stores use React Context, matching the pattern in
+  [src/store/index.tsx](file:///e:/ruixinglong/tauri-kits/src/store/index.tsx).
+- Each module's store exports its own `<XxxProvider>` and `useXxxStore()` hook.
+- Wrap only the module's page component with the provider, not the entire app.
+- Global state (auth user, locale) stays in `src/store/index.tsx`.
+
+### Step 7 — Register the route
+
+Edit [src/router/index.tsx](file:///e:/ruixinglong/tauri-kits/src/router/index.tsx)
+to register the new module as a child of the protected `/` layout.
+
+1. Add the import at the top of the file (note the directory-based import):
+
+```tsx
+import Product from '../components/product'
+```
+
+2. Add a new entry to the `children` array of the `/` route (after the existing
+   `/user` entry). The `AuthGuard` wrapper already protects all routes under
+   `/`, so no extra guard is needed:
+
+```tsx
+const router = createBrowserRouter([
+  {
+    path: '/login',
+    element: <Login />
+  },
+  {
+    path: '/',
+    element: (
+      <AuthGuard>
+        <Layout />
+      </AuthGuard>
+    ),
+    children: [
+      { path: '/', element: <Navigate to="/dashboard" replace /> },
+      { path: '/dashboard', element: <Dashboard /> },
+      { path: '/chart', element: <Chart /> },
+      { path: '/user', element: <User /> },
+      { path: '/product', element: <Product /> }   // <-- new route
+    ]
+  }
+])
+```
+
+Rules:
+
+- New modules MUST be nested under the `/` route so they inherit the
+  `<Layout>` (sider + header + footer) and the `AuthGuard` protection.
+- Public routes (no auth) must be top-level entries, like `/login`.
+- Route paths use kebab-case, e.g. `/order-item`.
+- Avoid duplicate paths — React Router will warn at runtime.
+- After registration, navigate via `<Menu>` (Step 8) or
+  `useNavigate()('/product')`.
+
+### Step 8 — Add the menu entry
+
+Edit [src/components/layout/Menu.tsx](file:///e:/ruixinglong/tauri-kits/src/components/layout/Menu.tsx)
+and add a menu item, optionally under a new parent group:
+
+```tsx
+{
+  key: 'System',
+  icon: <SettingOutlined />,
+  label: t('menu.system'),
+  children: [
+    { key: 'User', icon: <UserOutlined />, label: t('menu.system_user'), /* ... */ },
+    { key: 'Product', icon: <ShoppingCartOutlined />, label: t('menu.system_product'), /* ... */ }
+  ]
+}
+```
+
+### Step 9 — Add i18n keys
+
+Edit BOTH [src/lang/en.ts](file:///e:/ruixinglong/tauri-kits/src/lang/en.ts)
+and [src/lang/zh.ts](file:///e:/ruixinglong/tauri-kits/src/lang/zh.ts):
+
+```ts
+// en.ts
+menu: { ..., system_product: 'Product' }
+product: { name: 'Name', price: 'Price', state: 'State' }
+placeholder: { ..., input_product_name: 'Please input product name' }
+
+// zh.ts
+menu: { ..., system_product: '商品' }
+product: { name: '名称', price: '价格', state: '状态' }
+placeholder: { ..., input_product_name: '请输入商品名称' }
+```
+
+### Step 10 — Verify
+
+Run from the project root:
+
+```bash
+pnpm tauri dev
+```
+
+Then in the running app:
+
+1. Log in with `admin / admin123` (the DB initializes on first launch).
+2. Open the new menu entry.
+3. Test: search, add, edit, delete, pagination.
+
+For production build:
+
+```bash
+pnpm tauri build
+```
+
+---
+
+## 4. Common Pitfalls
+
+- **Appending new commands to `api.rs`** — every new module MUST live in its
+  own file `src-tauri/src/api/<module>.rs`. Keep only shared types
+  (`ApiResponse`, `PageResponse`) and the `get_db_pool` helper in `api.rs`.
+- **Putting module components in `src/components/` root** — module pages MUST
+  live in their own directory `src/components/<module>/`. Never create
+  `<Module>.tsx` directly under `src/components/`.
+- **Putting module state in `src/store/index.tsx`** — module-specific state
+  MUST live in `src/store/<module>.ts`. The global `index.tsx` should only
+  contain app-wide concerns like authentication.
+- **Putting module `invoke()` calls in shared files** — module business APIs
+  MUST live in `src/api/<module>.ts`. Never add `api_<module>_*` invokes to
+  `src/api/request.ts` or `src/api/db.ts`; those are for cross-module
+  helpers only.
+- **Forgetting to register the command** in `lib.rs` — `invoke` will throw
+  "command not found". Use the fully-qualified path
+  `api::<module>::api_<module>_<action>`.
+- **Inlining DDL in `api_db_init`** — each module owns its
+  `api_<module>_init` command; `api_db_init` only delegates.
+- **Mismatched invoke argument names** — Rust `page_size` must be called with
+  `pageSize` from JS for primitives; struct args keep their original name.
+- **Returning password hashes** — always blank out sensitive fields before
+  sending the struct back to the frontend.
+- **i18n keys only in one language** — every key must exist in both
+  `en.ts` and `zh.ts`, otherwise the UI shows the raw key.
+- **Skipping the SCSS file** — pages without scoped styles break the
+  `.page-wrapper` card layout.
+
+---
+
+## 5. CHANGELOG Standards
+
+All notable changes must be documented in `CHANGELOG.md`. Follow the
+[keepachangelog.com](https://keepachangelog.com/en/1.0.0/) format:
+
+```markdown
+## [version] - YYYY-MM-DD
+
+### Added
+
+- **Feature Name** - Description of the new feature
+  - Sub-item details
+
+### Changed
+
+- **Change Name** - Description of the change
+  - Sub-item details
+
+### Fixed
+
+- **Bug Name** - Description of the bug fix
+  - Sub-item details
+
+---
+```
+
+Rules:
+
+- Each version gets its own section with release date (YYYY-MM-DD).
+- Use the three standard categories: `Added`, `Changed`, `Fixed`.
+- Group related changes under a feature/change/bug name with a bold header.
+- Include sub-item details using nested bullet points when needed.
+- Always link to the relevant issue or PR if applicable.
+- Keep entries concise but descriptive enough for readers to understand
+  what changed without reading code.
+
+---
+
+## 6. Build & Tooling
+
+| Task                | Command             |
+| ------------------- | ------------------- |
+| Dev server          | `pnpm tauri dev`    |
+| Production build    | `pnpm tauri build`  |
+| Frontend only       | `pnpm dev`          |
+| Type-check + build  | `pnpm build`        |
+| CLI scaffold        | `npx tkits init`    |
+
+## 7. Maintainer
+
 Shing Rui <sunquakes@outlook.com>
-
-Contributors
-------------
-None yet.
-
-If you would like to contribute to this project, please see the README.md
-for more information.
