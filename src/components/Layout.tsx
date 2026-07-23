@@ -1,4 +1,4 @@
-import { Layout, theme } from 'antd'
+import { Layout } from "antd"
 import { useState } from 'react'
 import Logo from './layout/Logo'
 import Menu from './layout/Menu'
@@ -13,7 +13,6 @@ const { Sider, Content } = Layout
 export default function LayoutComponent() {
   const [collapsed, setCollapsed] = useState(false)
   const [currentMenu, setCurrentMenu] = useState('Dashboard')
-  const { token } = theme.useToken()
 
   return (
     <Layout className="main-layout" style={{ minHeight: '100vh' }}>

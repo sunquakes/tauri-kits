@@ -4,8 +4,8 @@
     {
       "label": "ui:dev",
       "type": "shell",
-      "command": "cmd",
-      "args": ["/c", "pnpm install && pnpm dev"],
+      "command": "pnpm",
+      "args": ["dev"],
       "isBackground": true,
       "problemMatcher": {
         "owner": "typescript",
@@ -15,17 +15,21 @@
         },
         "background": {
           "activeOnStart": true,
-          "beginsPattern": "^.*VITE.*ready",
-          "endsPattern": "^.*Local:.*http"
+          "beginsPattern": "^VITE",
+          "endsPattern": "Local:"
         }
       }
     },
     {
       "label": "ui:build",
       "type": "shell",
-      "command": "cmd",
-      "args": ["/c", "pnpm install && pnpm build"],
-      "problemMatcher": []
+      "command": "pnpm",
+      "args": ["build"],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
   ]
 }
