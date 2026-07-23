@@ -1,6 +1,6 @@
 import { Menu as AntMenu } from 'antd'
 import type { MenuProps as AntMenuProps } from 'antd'
-import { DashboardOutlined, PieChartOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons'
+import { DashboardOutlined, PieChartOutlined, AppstoreOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -30,6 +30,15 @@ export default function Menu({ currentMenu, setCurrentMenu }: MenuProps) {
       onClick: () => {
         setCurrentMenu('Chart')
         navigate('/chart')
+      }
+    },
+    {
+      key: 'Icon',
+      icon: <AppstoreOutlined />,
+      label: t('menu.icon'),
+      onClick: () => {
+        setCurrentMenu('Icon')
+        navigate('/icon')
       }
     },
     {

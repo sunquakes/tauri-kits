@@ -43,6 +43,7 @@ export default {
   menu: {
     dashboard: '首页',
     chart: '报表',
+    icon: '图标',
     system: '系统管理',
     system_user: '系统用户',
     profile: '个人资料',
@@ -101,5 +102,13 @@ export default {
   line_one: '浮世三千，吾爱有三，',
   line_two: '日，月与卿。',
   line_three: '日为朝，月为暮，',
-  line_four: '卿为朝朝暮暮。'
+  line_four: '卿为朝朝暮暮。',
+  icon: {
+    title: '图标展示',
+    description: '浏览 {{count}} 个 Ant Design 图标',
+    search_placeholder: '搜索图标名称...',
+    total: '总计：{{count}}',
+    filtered: '筛选：{{count}}',
+    no_results: '未找到 "{{keyword}}" 相关图标'
+  }
 }

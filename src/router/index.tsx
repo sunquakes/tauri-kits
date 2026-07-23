@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate, useLocation } from 'react-router-dom'
 import Layout from '../components/Layout'
 import Dashboard from '../components/Dashboard'
 import Chart from '../components/Chart'
+import Icon from '../components/Icon'
 import User from '../components/User'
 import Login from '../components/Login'
 import { useStore } from '../store'
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: '/chart',
         element: <Chart />
+      },
+      {
+        path: '/icon',
+        element: <Icon />
       },
       {
         path: '/user',

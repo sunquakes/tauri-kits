@@ -43,6 +43,7 @@ export default {
   menu: {
     dashboard: 'Dashboard',
     chart: 'Chart',
+    icon: 'Icon',
     system: 'System',
     system_user: 'User',
     profile: 'Profile',
@@ -101,5 +102,13 @@ export default {
   line_one: 'I love three things in this world,',
   line_two: 'the sun, the moon and you.',
   line_three: 'The sun for the day, the moon for the night,',
-  line_four: 'and you forever.'
+  line_four: 'and you forever.',
+  icon: {
+    title: 'Icon Gallery',
+    description: 'Browse {{count}} Ant Design icons with live preview',
+    search_placeholder: 'Search icons by name...',
+    total: 'Total: {{count}}',
+    filtered: 'Filtered: {{count}}',
+    no_results: 'No icons found for "{{keyword}}"'
+  }
 }
