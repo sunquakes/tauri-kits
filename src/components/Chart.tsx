@@ -9,8 +9,8 @@ import './Chart.scss'
 
 export default function Chart() {
   return (
-    <>
-      <Row>
+    <div className="chart-page">
+      <Row className="chart-row" gutter={16}>
         <Col className="chart-container" span={12}>
           <Pie data={pieData} />
         </Col>
@@ -18,11 +18,11 @@ export default function Chart() {
           <Bar data={barData} />
         </Col>
       </Row>
-      <Row>
+      <Row className="chart-row">
         <Col className="chart-container" span={24}>
           <Line data={lineData} />
         </Col>
       </Row>
-    </>
+    </div>
   )
 }

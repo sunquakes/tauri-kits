@@ -15,7 +15,7 @@ export default function LayoutComponent() {
   const [currentMenu, setCurrentMenu] = useState('Dashboard')
 
   return (
-    <Layout className="main-layout" style={{ minHeight: '100vh' }}>
+    <Layout className="main-layout">
       <Sider 
         className="layout-sider"
         collapsible 

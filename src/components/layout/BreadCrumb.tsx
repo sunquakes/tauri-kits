@@ -17,6 +17,8 @@ export default function BreadCrumb({ currentMenu }: BreadCrumbProps) {
 
     if (currentMenu === 'Chart') {
       items[1] = { title: t('menu.chart') }
+    } else if (currentMenu === 'Icon') {
+      items[1] = { title: t('menu.icon') }
     } else if (currentMenu === 'User') {
       items[1] = { title: t('menu.system') }
       items.push({ title: t('menu.system_user') })
