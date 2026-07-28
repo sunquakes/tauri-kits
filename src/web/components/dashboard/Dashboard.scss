@@ -82,6 +82,37 @@
   }
 }
 
+/* === Charts Overview Button === */
+.sc-charts-btn {
+  position: absolute;
+  top: 10px;
+  right: 100px;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  font-family: var(--sc-font-sans);
+  font-size: var(--sc-fs-caption);
+  font-weight: var(--sc-fw-semibold);
+  color: var(--sc-magenta-soft);
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  background: rgba(255, 0, 160, 0.08);
+  border: 1px solid rgba(255, 0, 160, 0.35);
+  border-radius: var(--sc-radius-sm);
+  box-shadow: var(--sc-glow-magenta);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.sc-charts-btn:hover {
+  color: var(--sc-text-primary);
+  background: rgba(255, 0, 160, 0.2);
+  border-color: var(--sc-magenta);
+  box-shadow: 0 0 18px rgba(255, 0, 160, 0.8);
+}
+
 /* === Main 3-column === */
 .sc-main {
   display: grid;

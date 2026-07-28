@@ -2,7 +2,7 @@ import { EnvironmentOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import Panel from './Panel'
 import Gauge from './Gauge'
-import ChartBox from './ChartBox'
+import ChartBox from '../chart/ChartBox'
 import './EnvPanel.scss'
 
 export default function EnvPanel() {

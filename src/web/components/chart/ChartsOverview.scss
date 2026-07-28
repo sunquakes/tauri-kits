@@ -1,0 +1,15 @@
+@import './variables.scss';
+
+.charts-overview {
+  &.sc-shell {
+    grid-template-rows: auto 1fr;
+  }
+}
+
+.sc-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  min-height: 0;
+}

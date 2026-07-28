@@ -1,4 +1,4 @@
-import { ThunderboltOutlined, WarningOutlined, VideoCameraOutlined, FileTextOutlined, HomeOutlined } from '@ant-design/icons'
+import { ThunderboltOutlined, WarningOutlined, VideoCameraOutlined, FileTextOutlined, HomeOutlined, BarChartOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import Header from './Header'
 import TrafficPanel from './TrafficPanel'
@@ -14,12 +14,21 @@ export default function Dashboard() {
     window.location.href = window.location.origin + '/'
   }
 
+  const handleGoToCharts = () => {
+    window.location.href = window.location.origin + '/charts'
+  }
+
   return (
     <div className="sc-shell">
       {/* Back to Admin Button */}
       <button className="sc-admin-btn" onClick={handleBackToAdmin} title={t('dashboard.back_to_admin')}>
         <HomeOutlined style={{ fontSize: 16 }} />
         <span>Admin</span>
+      </button>
+      {/* Charts Overview Button */}
+      <button className="sc-charts-btn" onClick={handleGoToCharts} title={t('dashboard.charts_overview')}>
+        <BarChartOutlined style={{ fontSize: 16 }} />
+        <span>{t('dashboard.charts_overview')}</span>
       </button>
 
       {/* Header */}
