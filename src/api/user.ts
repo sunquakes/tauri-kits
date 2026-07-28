@@ -52,6 +52,7 @@ export async function del(where: any[][]): Promise<any> {
 }
 
 export async function edit(id: number, data: any): Promise<any> {
+  data.state = data.state ?? 1
   const result = await invoke<ApiResponse<any>>('api_user_update', { id, user: data })
   if (result.code !== 200) {
     throw new Error(result.message)
