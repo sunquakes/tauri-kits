@@ -355,6 +355,31 @@ pub fn build_select_sql(db_type: DbType, table: &str, select_cols: &str, where_s
     }
 }
 
+pub fn build_where_clause(db_type: DbType, where_conditions: &[Vec<String>]) -> (String, Vec<String>) {
+    if where_conditions.is_empty() {
+        return (String::new(), Vec::new());
+    }
+
+    let mut conditions: Vec<String> = Vec::new();
+    let mut values: Vec<String> = Vec::new();
+
+    for (idx, condition) in where_conditions.iter().enumerate() {
+        if condition.len() != 3 {
+            continue;
+        }
+
+        let col = &condition[0];
+        let op = &condition[1].to_uppercase();
+        let val = &condition[2];
+
+        let ph = db_type.placeholder(idx + 1);
+        conditions.push(format!("{} {} {}", col, op, ph));
+        values.push(val.clone());
+    }
+
+    (conditions.join(" AND "), values)
+}
+
 // High-level database operations
 
 pub async fn db_find_one(
@@ -384,17 +409,25 @@ pub async fn db_page_records(
     order_by: &str,
     page: i64,
     page_size: i64,
+    where_conditions: &[Vec<String>],
 ) -> Result<(Vec<sqlx::any::AnyRow>, i64), String> {
     let db_type = get_db_type(pool);
     
-    let total = db_count(pool, table, "").await.unwrap_or(0);
+    let (where_sql, where_values) = build_where_clause(db_type, where_conditions);
     
-    let base_sql = build_select_sql(db_type, table, select_cols, "");
+    let total = db_count(pool, table, &where_sql).await.unwrap_or(0);
+    
+    let base_sql = build_select_sql(db_type, table, select_cols, &where_sql);
     let query_sql = paginate_sql(db_type, &base_sql, order_by);
 
-    let rows = sqlx::query(&query_sql)
-        .bind(page_size)
-        .bind((page - 1) * page_size)
+    let mut query = sqlx::query(&query_sql);
+    for val in &where_values {
+        query = query.bind(val);
+    }
+    query = query.bind(page_size);
+    query = query.bind((page - 1) * page_size);
+
+    let rows = query
         .fetch_all(pool)
         .await
         .map_err(|e| format!("Query failed: {}", e))?;

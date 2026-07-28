@@ -1,0 +1,103 @@
+﻿@use './variables.scss' as *;
+
+/* === Bottom indicator cards === */
+.sc-indicator-card {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-md);
+  padding: 8px 14px;
+  background: var(--sc-gradient-panel);
+  border: 1px solid var(--sc-border-cyan);
+  border-radius: var(--sc-radius-md);
+  position: relative;
+  box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.04);
+  box-sizing: border-box;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-color: var(--sc-cyan);
+    border-style: solid;
+    pointer-events: none;
+  }
+
+  &::before {
+    top: -1px;
+    left: -1px;
+    border-width: 2px 0 0 2px;
+  }
+
+  &::after {
+    bottom: -1px;
+    right: -1px;
+    border-width: 0 2px 2px 0;
+  }
+}
+
+.sc-hex-icon {
+  width: 44px;
+  height: 44px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.25), rgba(0, 128, 255, 0.1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.4));
+
+  &.magenta {
+    background: linear-gradient(135deg, rgba(255, 0, 160, 0.25), rgba(123, 60, 255, 0.1));
+    filter: drop-shadow(0 0 5px rgba(255, 0, 160, 0.4));
+  }
+
+  &.gold {
+    background: linear-gradient(135deg, rgba(255, 204, 0, 0.25), rgba(255, 153, 0, 0.1));
+    filter: drop-shadow(0 0 5px rgba(255, 204, 0, 0.4));
+  }
+
+  &.green {
+    background: linear-gradient(135deg, rgba(0, 255, 166, 0.25), rgba(0, 176, 120, 0.1));
+    filter: drop-shadow(0 0 5px rgba(0, 255, 166, 0.4));
+  }
+}
+
+.sc-indicator-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sc-indicator-value {
+  font-family: var(--sc-font-digital);
+  font-size: var(--sc-fs-h1);
+  font-weight: var(--sc-fw-bold);
+  color: var(--sc-cyan);
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+  line-height: var(--sc-lh-tight);
+  white-space: nowrap;
+
+  &.magenta {
+    color: var(--sc-magenta-soft);
+    text-shadow: 0 0 10px rgba(255, 0, 160, 0.5);
+  }
+
+  &.gold {
+    color: var(--sc-gold);
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+  }
+
+  &.green {
+    color: var(--sc-success);
+    text-shadow: 0 0 10px rgba(0, 255, 166, 0.5);
+  }
+}
+
+.sc-indicator-label {
+  font-size: var(--sc-fs-caption);
+  color: var(--sc-text-secondary);
+  letter-spacing: 2px;
+  margin-top: 2px;
+}

@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>城市运行态势监测平台</title>
+    <style id="theme-vars">
+/* Smart City Dashboard — Brand Colors & Type
+   Derived from reference: deep navy/black background, electric blue,
+   magenta/pink, cyan accents. Futuristic HUD / data-screen aesthetic. */
+
+:root {
+  /* ===== Surface / Background ===== */
+  --sc-bg-primary: #050b1a;
+  --sc-bg-secondary: #0a1530;
+  --sc-bg-panel: rgba(10, 24, 56, 0.55);
+  --sc-bg-panel-solid: #0c1a3a;
+  --sc-bg-overlay: rgba(5, 11, 26, 0.85);
+
+  /* ===== Brand Hues ===== */
+  --sc-cyan: #00d4ff;
+  --sc-cyan-soft: #4fe2ff;
+  --sc-blue: #0080ff;
+  --sc-blue-deep: #0048b0;
+  --sc-magenta: #ff00a0;
+  --sc-magenta-soft: #ff6b9d;
+  --sc-purple: #7b3cff;
+  --sc-gold: #ffcc00;
+
+  /* ===== Semantic States ===== */
+  --sc-success: #00ffa6;
+  --sc-warning: #ffcc00;
+  --sc-danger: #ff3b5c;
+  --sc-info: #00d4ff;
+
+  /* ===== Text ===== */
+  --sc-text-primary: #e8f4ff;
+  --sc-text-secondary: #8fb3d9;
+  --sc-text-tertiary: #5a7da6;
+  --sc-text-accent: #00d4ff;
+  --sc-text-magenta: #ff6b9d;
+
+  /* ===== Border / Divider ===== */
+  --sc-border-cyan: rgba(0, 212, 255, 0.35);
+  --sc-border-soft: rgba(0, 212, 255, 0.15);
+  --sc-divider: rgba(143, 179, 217, 0.12);
+
+  /* ===== Glow ===== */
+  --sc-glow-cyan: 0 0 12px rgba(0, 212, 255, 0.6);
+  --sc-glow-magenta: 0 0 12px rgba(255, 0, 160, 0.55);
+  --sc-glow-blue: 0 0 16px rgba(0, 128, 255, 0.5);
+
+  /* ===== Gradients ===== */
+  --sc-gradient-cyan-magenta: linear-gradient(90deg, #00d4ff 0%, #7b3cff 50%, #ff00a0 100%);
+  --sc-gradient-panel: linear-gradient(180deg, rgba(0, 212, 255, 0.08) 0%, rgba(10, 24, 56, 0.6) 100%);
+  --sc-gradient-header: linear-gradient(90deg, transparent 0%, rgba(0, 212, 255, 0.25) 50%, transparent 100%);
+
+  /* ===== Typography ===== */
+  --sc-font-sans: "PingFang SC", "Microsoft YaHei", "HarmonyOS Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --sc-font-digital: "DIN Alternate", "Bahnschrift", "Impact", "PingFang SC", sans-serif;
+  --sc-font-mono: "JetBrains Mono", "Consolas", "Courier New", monospace;
+
+  /* Type scale (dashboard large screen) */
+  --sc-fs-display: 56px;
+  --sc-fs-h1: 32px;
+  --sc-fs-h2: 22px;
+  --sc-fs-h3: 18px;
+  --sc-fs-body: 14px;
+  --sc-fs-caption: 12px;
+  --sc-fs-mini: 10px;
+
+  /* Weight */
+  --sc-fw-regular: 400;
+  --sc-fw-medium: 500;
+  --sc-fw-semibold: 600;
+  --sc-fw-bold: 700;
+
+  /* Line height */
+  --sc-lh-tight: 1.2;
+  --sc-lh-normal: 1.5;
+
+  /* ===== Radius ===== */
+  --sc-radius-sm: 4px;
+  --sc-radius-md: 8px;
+  --sc-radius-lg: 12px;
+  --sc-radius-pill: 999px;
+
+  /* ===== Spacing ===== */
+  --sc-space-xs: 4px;
+  --sc-space-sm: 8px;
+  --sc-space-md: 16px;
+  --sc-space-lg: 24px;
+  --sc-space-xl: 32px;
+
+  /* ===== Semantic Aliases (for fill-html-head.mjs / Tailwind bridge) ===== */
+  --sc-background: var(--sc-bg-primary);
+  --sc-foreground: var(--sc-text-primary);
+  --sc-card: var(--sc-bg-panel);
+  --sc-card-foreground: var(--sc-text-primary);
+  --sc-popover: var(--sc-bg-panel-solid);
+  --sc-popover-foreground: var(--sc-text-primary);
+  --sc-primary: var(--sc-cyan);
+  --sc-primary-foreground: var(--sc-bg-primary);
+  --sc-secondary: var(--sc-blue-deep);
+  --sc-secondary-foreground: var(--sc-text-primary);
+  --sc-muted: var(--sc-bg-secondary);
+  --sc-muted-foreground: var(--sc-text-secondary);
+  --sc-accent: var(--sc-magenta);
+  --sc-accent-foreground: var(--sc-text-primary);
+  --sc-destructive: var(--sc-danger);
+  --sc-destructive-foreground: var(--sc-text-primary);
+  --sc-border: var(--sc-border-cyan);
+  --sc-input: var(--sc-border-cyan);
+  --sc-ring: var(--sc-cyan);
+  --sc-radius: var(--sc-radius-md);
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--sc-background);
+    --color-foreground: var(--sc-foreground);
+    --color-card: var(--sc-card);
+    --color-card-foreground: var(--sc-card-foreground);
+    --color-popover: var(--sc-popover);
+    --color-popover-foreground: var(--sc-popover-foreground);
+    --color-primary: var(--sc-primary);
+    --color-primary-foreground: var(--sc-primary-foreground);
+    --color-secondary: var(--sc-secondary);
+    --color-secondary-foreground: var(--sc-secondary-foreground);
+    --color-muted: var(--sc-muted);
+    --color-muted-foreground: var(--sc-muted-foreground);
+    --color-accent: var(--sc-accent);
+    --color-accent-foreground: var(--sc-accent-foreground);
+    --color-destructive: var(--sc-destructive);
+    --color-destructive-foreground: var(--sc-destructive-foreground);
+    --color-border: var(--sc-border);
+    --color-input: var(--sc-input);
+    --color-ring: var(--sc-ring);
+    --radius-sm: var(--sc-radius-sm);
+    --radius-md: var(--sc-radius-md);
+    --radius-lg: var(--sc-radius-lg);
+  }
+  @layer base {
+    body { background: var(--sc-background); color: var(--sc-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--sc-background); }
+      .text-background { color: var(--sc-background); }
+      .border-background { border-color: var(--sc-background); }
+      .ring-background { --tw-ring-color: var(--sc-background); }
+      .bg-foreground { background-color: var(--sc-foreground); }
+      .text-foreground { color: var(--sc-foreground); }
+      .border-foreground { border-color: var(--sc-foreground); }
+      .ring-foreground { --tw-ring-color: var(--sc-foreground); }
+      .bg-card { background-color: var(--sc-card); }
+      .text-card { color: var(--sc-card); }
+      .border-card { border-color: var(--sc-card); }
+      .ring-card { --tw-ring-color: var(--sc-card); }
+      .bg-card-foreground { background-color: var(--sc-card-foreground); }
+      .text-card-foreground { color: var(--sc-card-foreground); }
+      .border-card-foreground { border-color: var(--sc-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--sc-card-foreground); }
+      .bg-popover { background-color: var(--sc-popover); }
+      .text-popover { color: var(--sc-popover); }
+      .border-popover { border-color: var(--sc-popover); }
+      .ring-popover { --tw-ring-color: var(--sc-popover); }
+      .bg-popover-foreground { background-color: var(--sc-popover-foreground); }
+      .text-popover-foreground { color: var(--sc-popover-foreground); }
+      .border-popover-foreground { border-color: var(--sc-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--sc-popover-foreground); }
+      .bg-primary { background-color: var(--sc-primary); }
+      .text-primary { color: var(--sc-primary); }
+      .border-primary { border-color: var(--sc-primary); }
+      .ring-primary { --tw-ring-color: var(--sc-primary); }
+      .bg-primary-foreground { background-color: var(--sc-primary-foreground); }
+      .text-primary-foreground { color: var(--sc-primary-foreground); }
+      .border-primary-foreground { border-color: var(--sc-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--sc-primary-foreground); }
+      .bg-secondary { background-color: var(--sc-secondary); }
+      .text-secondary { color: var(--sc-secondary); }
+      .border-secondary { border-color: var(--sc-secondary); }
+      .ring-secondary { --tw-ring-color: var(--sc-secondary); }
+      .bg-secondary-foreground { background-color: var(--sc-secondary-foreground); }
+      .text-secondary-foreground { color: var(--sc-secondary-foreground); }
+      .border-secondary-foreground { border-color: var(--sc-secondary-foreground); }
+      .ring-secondary-foreground { --tw-ring-color: var(--sc-secondary-foreground); }
+      .bg-muted { background-color: var(--sc-muted); }
+      .text-muted { color: var(--sc-muted); }
+      .border-muted { border-color: var(--sc-muted); }
+      .ring-muted { --tw-ring-color: var(--sc-muted); }
+      .bg-muted-foreground { background-color: var(--sc-muted-foreground); }
+      .text-muted-foreground { color: var(--sc-muted-foreground); }
+      .border-muted-foreground { border-color: var(--sc-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--sc-muted-foreground); }
+      .bg-accent { background-color: var(--sc-accent); }
+      .text-accent { color: var(--sc-accent); }
+      .border-accent { border-color: var(--sc-accent); }
+      .ring-accent { --tw-ring-color: var(--sc-accent); }
+      .bg-accent-foreground { background-color: var(--sc-accent-foreground); }
+      .text-accent-foreground { color: var(--sc-accent-foreground); }
+      .border-accent-foreground { border-color: var(--sc-accent-foreground); }
+      .ring-accent-foreground { --tw-ring-color: var(--sc-accent-foreground); }
+      .bg-destructive { background-color: var(--sc-destructive); }
+      .text-destructive { color: var(--sc-destructive); }
+      .border-destructive { border-color: var(--sc-destructive); }
+      .ring-destructive { --tw-ring-color: var(--sc-destructive); }
+      .bg-destructive-foreground { background-color: var(--sc-destructive-foreground); }
+      .text-destructive-foreground { color: var(--sc-destructive-foreground); }
+      .border-destructive-foreground { border-color: var(--sc-destructive-foreground); }
+      .ring-destructive-foreground { --tw-ring-color: var(--sc-destructive-foreground); }
+      .bg-border { background-color: var(--sc-border); }
+      .text-border { color: var(--sc-border); }
+      .border-border { border-color: var(--sc-border); }
+      .ring-border { --tw-ring-color: var(--sc-border); }
+      .bg-input { background-color: var(--sc-input); }
+      .text-input { color: var(--sc-input); }
+      .border-input { border-color: var(--sc-input); }
+      .ring-input { --tw-ring-color: var(--sc-input); }
+      .bg-ring { background-color: var(--sc-ring); }
+      .text-ring { color: var(--sc-ring); }
+      .border-ring { border-color: var(--sc-ring); }
+      .ring-ring { --tw-ring-color: var(--sc-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="font-sans antialiased">
+    <main>
+      <div class="sc-shell overflow-y-auto no-scrollbar" data-viewport-mode="app-shell" data-scroll-region="primary">
+        <!-- ===== Admin Back Button ===== -->
+        <a href="../admin.html" class="sc-admin-btn" data-dom-id="back-admin" title="返回 Admin 首页">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Admin</span>
+        </a>
+        <!-- ===== HEADER (vc-02) ===== -->
+        <header class="sc-header">
+          <div class="sc-header-deco left">
+            <span class="deco-diamond"></span>
+            <span class="deco-line"></span>
+            <span class="deco-bar"></span>
+          </div>
+          <div class="sc-header-title-block">
+            <span class="sc-header-corner tl"></span>
+            <span class="sc-header-corner tr"></span>
+            <span class="sc-header-corner bl"></span>
+            <span class="sc-header-corner br"></span>
+            <h1 class="sc-header-title">城市运行态势监测平台</h1>
+            <p class="sc-header-subtitle">交通 · 环境 · 能耗 · 安全</p>
+          </div>
+          <div class="sc-header-deco right">
+            <span class="deco-bar"></span>
+            <span class="deco-line"></span>
+            <span class="deco-diamond"></span>
+          </div>
+        </header>
+
+        <!-- ===== MAIN 3-COLUMN (vc-03) ===== -->
+        <div class="sc-main">
+          <!-- LEFT: TRAFFIC (vc-04) -->
+          <section class="sc-panel sc-traffic">
+            <div class="sc-panel-header">
+              <span class="sc-panel-icon"><i data-lucide="car" style="width:16px;height:16px;color:var(--sc-cyan);"></i></span>
+              <span class="sc-panel-title">交通监测</span>
+              <span class="sc-panel-status">实时</span>
+            </div>
+            <div class="sc-panel-body">
+              <div class="sc-metric-block">
+                <div class="sc-metric-icon-ring"><i data-lucide="car" style="width:22px;height:22px;color:var(--sc-cyan);"></i></div>
+                <div class="sc-metric-text">
+                  <div class="sc-metric-label">交通流量</div>
+                  <div class="sc-metric-value cyan">92.6<span class="sc-unit">万次</span></div>
+                </div>
+              </div>
+              <div class="sc-gauge-row">
+                <div class="sc-gauge-item">
+                  <div class="sc-gauge-circle magenta">
+                    <div class="sc-gauge-center">
+                      <span class="sc-gauge-number">1.28</span>
+                    </div>
+                  </div>
+                  <div class="sc-gauge-label">拥堵指数</div>
+                </div>
+                <div class="sc-gauge-item">
+                  <div class="sc-gauge-circle cyan small">
+                    <div class="sc-gauge-center">
+                      <span class="sc-gauge-number">46</span>
+                      <span class="sc-gauge-unit">km/h</span>
+                    </div>
+                  </div>
+                  <div class="sc-gauge-label">平均车速</div>
+                </div>
+              </div>
+              <div class="sc-chart-box">
+                <div class="sc-chart-title">24小时车速趋势</div>
+                <div class="sc-chart-wrap"><canvas id="speedChart" width="320" height="130"></canvas></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- CENTER: 3D CITY (vc-05) -->
+          <section class="sc-panel sc-city">
+            <div class="sc-panel-header">
+              <span class="sc-panel-icon"><i data-lucide="building" style="width:16px;height:16px;color:var(--sc-cyan);"></i></span>
+              <span class="sc-panel-title">城市数字孪生</span>
+              <span class="sc-panel-status">在线</span>
+            </div>
+            <div class="sc-city-stage">
+              <div class="sc-city-rings"></div>
+              <div class="sc-city-radar"></div>
+              <div class="sc-city-glow"></div>
+              <div class="sc-city-buildings">
+                <div class="sc-building" style="width:18px;height:50px;opacity:0.5;"></div>
+                <div class="sc-building" style="width:22px;height:70px;opacity:0.6;"></div>
+                <div class="sc-building" style="width:26px;height:100px;opacity:0.75;"></div>
+                <div class="sc-building" style="width:30px;height:140px;opacity:0.9;"></div>
+                <div class="sc-building" style="width:28px;height:120px;opacity:0.8;"></div>
+                <div class="sc-building" style="width:22px;height:85px;opacity:0.65;"></div>
+                <div class="sc-building" style="width:20px;height:60px;opacity:0.5;"></div>
+                <div class="sc-building" style="width:18px;height:55px;opacity:0.45;"></div>
+              </div>
+              <svg class="sc-arteries" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                  <linearGradient id="arteryGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:var(--sc-magenta);stop-opacity:1"/>
+                    <stop offset="50%" style="stop-color:var(--sc-purple);stop-opacity:0.8"/>
+                    <stop offset="100%" style="stop-color:var(--sc-cyan);stop-opacity:1"/>
+                  </linearGradient>
+                  <linearGradient id="arteryGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:var(--sc-cyan);stop-opacity:0.6"/>
+                    <stop offset="100%" style="stop-color:var(--sc-magenta-soft);stop-opacity:0.9"/>
+                  </linearGradient>
+                </defs>
+                <path d="M 40 200 Q 200 40 360 200" fill="none" stroke="url(#arteryGrad1)" stroke-width="2" class="sc-artery-path"/>
+                <path d="M 70 230 Q 200 90 330 230" fill="none" stroke="url(#arteryGrad2)" stroke-width="1.5" class="sc-artery-path" style="animation-delay:0.5s;"/>
+                <path d="M 50 170 Q 200 270 350 170" fill="none" stroke="url(#arteryGrad1)" stroke-width="1" opacity="0.5" class="sc-artery-path" style="animation-delay:1s;"/>
+              </svg>
+              <div class="sc-hex-marker m1"><i data-lucide="map-pin" style="width:12px;height:12px;color:var(--sc-cyan);"></i></div>
+              <div class="sc-hex-marker m2"><i data-lucide="activity" style="width:12px;height:12px;color:var(--sc-magenta-soft);"></i></div>
+              <div class="sc-hex-marker m3"><i data-lucide="radio" style="width:12px;height:12px;color:var(--sc-cyan);"></i></div>
+              <div class="sc-city-label">CITY DIGITAL TWIN · 实时态势</div>
+            </div>
+          </section>
+
+          <!-- RIGHT: ENVIRONMENT (vc-06) -->
+          <section class="sc-panel sc-env">
+            <div class="sc-panel-header">
+              <span class="sc-panel-icon"><i data-lucide="leaf" style="width:16px;height:16px;color:var(--sc-cyan);"></i></span>
+              <span class="sc-panel-title">环境监测</span>
+              <span class="sc-panel-status">实时</span>
+            </div>
+            <div class="sc-panel-body">
+              <div class="sc-metric-block">
+                <div class="sc-gauge-circle green">
+                  <div class="sc-gauge-center">
+                    <span class="sc-gauge-text">优</span>
+                  </div>
+                </div>
+                <div class="sc-metric-text">
+                  <div class="sc-metric-label">空气质量</div>
+                  <div class="sc-metric-value-small">PM2.5 28<span class="sc-unit">μg/m³</span></div>
+                </div>
+              </div>
+              <div class="sc-noise-block">
+                <div class="sc-noise-gauges">
+                  <div class="sc-vbar-item">
+                    <div class="sc-vbar">
+                      <div class="sc-vbar-fill"></div>
+                    </div>
+                    <div class="sc-vbar-label">dB</div>
+                  </div>
+                  <div class="sc-gauge-item">
+                    <div class="sc-gauge-circle cyan">
+                      <div class="sc-gauge-center">
+                        <span class="sc-gauge-number">42</span>
+                        <span class="sc-gauge-unit">dB</span>
+                      </div>
+                    </div>
+                    <div class="sc-gauge-label">噪声指数</div>
+                  </div>
+                </div>
+              </div>
+              <div class="sc-chart-box">
+                <div class="sc-chart-title">24小时噪声趋势</div>
+                <div class="sc-chart-wrap"><canvas id="noiseChart" width="320" height="130"></canvas></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- ===== BOTTOM: 4 INDICATOR CARDS (vc-07) ===== -->
+        <div class="sc-bottom">
+          <div class="sc-indicator-card">
+            <div class="sc-hex-icon"><i data-lucide="zap" style="width:24px;height:24px;color:var(--sc-cyan);"></i></div>
+            <div class="sc-indicator-info">
+              <div class="sc-indicator-value">1,280<span class="sc-unit">吨标煤</span></div>
+              <div class="sc-indicator-label">能耗</div>
+            </div>
+          </div>
+          <div class="sc-indicator-card">
+            <div class="sc-hex-icon magenta"><i data-lucide="shield-alert" style="width:24px;height:24px;color:var(--sc-magenta-soft);"></i></div>
+            <div class="sc-indicator-info">
+              <div class="sc-indicator-value magenta">36<span class="sc-unit">起</span></div>
+              <div class="sc-indicator-label">事件预警</div>
+            </div>
+          </div>
+          <div class="sc-indicator-card">
+            <div class="sc-hex-icon"><i data-lucide="video" style="width:24px;height:24px;color:var(--sc-cyan);"></i></div>
+            <div class="sc-indicator-info">
+              <div class="sc-indicator-value">98.2<span class="sc-unit">%</span></div>
+              <div class="sc-indicator-label">摄像头在线</div>
+            </div>
+          </div>
+          <div class="sc-indicator-card">
+            <div class="sc-hex-icon"><i data-lucide="clipboard-list" style="width:24px;height:24px;color:var(--sc-cyan);"></i></div>
+            <div class="sc-indicator-info">
+              <div class="sc-indicator-value">96.7<span class="sc-unit">%</span></div>
+              <div class="sc-indicator-label">工单处理</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <style>
+      /* === Body fixed viewport (vc-01) === */
+      body {
+        margin: 0;
+        height: 100vh;
+        overflow: hidden;
+        min-height: 100vh;
+        font-family: var(--sc-font-sans);
+        background: var(--sc-bg-primary);
+        position: relative;
+      }
+      /* Background grid texture (vc-08) */
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(var(--sc-border-soft) 1px, transparent 1px),
+          linear-gradient(90deg, var(--sc-border-soft) 1px, transparent 1px);
+        background-size: 40px 40px;
+        opacity: 0.4;
+        pointer-events: none;
+        z-index: 0;
+      }
+      /* Radial glow spots (vc-08) */
+      body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(ellipse at 20% 30%, rgba(0, 212, 255, 0.08), transparent 50%),
+          radial-gradient(ellipse at 80% 70%, rgba(255, 0, 160, 0.06), transparent 50%),
+          radial-gradient(ellipse at 50% 50%, rgba(0, 128, 255, 0.04), transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* === Dashboard shell (vc-01) === */
+      .sc-shell {
+        position: relative;
+        z-index: 1;
+        width: 100vw;
+        height: 100vh;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        gap: 8px;
+        padding: 8px 10px;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+
+      /* === Admin Back Button === */
+      .sc-admin-btn {
+        position: absolute;
+        top: 10px;
+        right: 14px;
+        z-index: 50;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 14px;
+        font-family: var(--sc-font-sans);
+        font-size: var(--sc-fs-caption);
+        font-weight: var(--sc-fw-semibold);
+        color: var(--sc-cyan);
+        text-decoration: none;
+        letter-spacing: 0.5px;
+        background: rgba(0, 212, 255, 0.08);
+        border: 1px solid var(--sc-border-cyan);
+        border-radius: var(--sc-radius-sm);
+        box-shadow: var(--sc-glow-cyan);
+        transition: all 0.2s ease;
+        white-space: nowrap;
+      }
+      .sc-admin-btn svg { flex-shrink: 0; }
+      .sc-admin-btn:hover {
+        color: var(--sc-text-primary);
+        background: rgba(0, 212, 255, 0.2);
+        border-color: var(--sc-cyan);
+        box-shadow: 0 0 18px rgba(0, 212, 255, 0.8);
+      }
+
+      /* === Header (vc-02) === */
+      .sc-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--sc-space-md);
+        padding: 4px 0;
+      }
+      .sc-header-deco {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex: 1;
+      }
+      .sc-header-deco.left { justify-content: flex-end; }
+      .sc-header-deco.right { justify-content: flex-start; }
+      .deco-line {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--sc-cyan));
+        flex: 1;
+        max-width: 180px;
+        opacity: 0.7;
+      }
+      .sc-header-deco.right .deco-line {
+        background: linear-gradient(90deg, var(--sc-cyan), transparent);
+      }
+      .deco-diamond {
+        width: 8px;
+        height: 8px;
+        background: var(--sc-cyan);
+        box-shadow: var(--sc-glow-cyan);
+        transform: rotate(45deg);
+        flex-shrink: 0;
+      }
+      .deco-bar {
+        width: 3px;
+        height: 20px;
+        background: linear-gradient(180deg, var(--sc-cyan), transparent);
+        flex-shrink: 0;
+        opacity: 0.6;
+      }
+      .sc-header-title-block {
+        text-align: center;
+        padding: 6px 48px;
+        position: relative;
+        background: linear-gradient(180deg, rgba(0, 212, 255, 0.06) 0%, transparent 100%);
+      }
+      .sc-header-corner {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-color: var(--sc-cyan);
+        border-style: solid;
+      }
+      .sc-header-corner.tl { top: 0; left: 0; border-width: 2px 0 0 2px; }
+      .sc-header-corner.tr { top: 0; right: 0; border-width: 2px 2px 0 0; }
+      .sc-header-corner.bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+      .sc-header-corner.br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+      .sc-header-title {
+        font-size: clamp(24px, 2.6vw, var(--sc-fs-display));
+        font-weight: var(--sc-fw-bold);
+        font-family: var(--sc-font-sans);
+        background: linear-gradient(180deg, var(--sc-text-primary) 0%, var(--sc-cyan) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: 6px;
+        margin: 0;
+        line-height: var(--sc-lh-tight);
+        text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        white-space: nowrap;
+      }
+      .sc-header-subtitle {
+        font-size: var(--sc-fs-caption);
+        color: var(--sc-text-secondary);
+        margin: 2px 0 0 0;
+        letter-spacing: 4px;
+        white-space: nowrap;
+      }
+
+      /* === Main 3-column (vc-03) === */
+      .sc-main {
+        display: grid;
+        grid-template-columns: 24% 1fr 24%;
+        gap: 8px;
+        min-height: 0;
+      }
+
+      /* === Panel base (vc-03, vc-08) === */
+      .sc-panel {
+        background: var(--sc-gradient-panel);
+        border: 1px solid var(--sc-border-cyan);
+        border-radius: var(--sc-radius-md);
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        position: relative;
+        box-shadow: inset 0 0 30px rgba(0, 212, 255, 0.04);
+        box-sizing: border-box;
+      }
+      .sc-panel::before,
+      .sc-panel::after {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-color: var(--sc-cyan);
+        border-style: solid;
+        pointer-events: none;
+      }
+      .sc-panel::before {
+        top: -1px;
+        left: -1px;
+        border-width: 2px 0 0 2px;
+      }
+      .sc-panel::after {
+        bottom: -1px;
+        right: -1px;
+        border-width: 0 2px 2px 0;
+      }
+
+      /* Panel header */
+      .sc-panel-header {
+        display: flex;
+        align-items: center;
+        gap: var(--sc-space-sm);
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--sc-divider);
+        margin-bottom: 8px;
+        flex-shrink: 0;
+      }
+      .sc-panel-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border: 1px solid var(--sc-border-cyan);
+        border-radius: var(--sc-radius-sm);
+        background: rgba(0, 212, 255, 0.08);
+        flex-shrink: 0;
+      }
+      .sc-panel-title {
+        font-size: var(--sc-fs-h3);
+        font-weight: var(--sc-fw-semibold);
+        color: var(--sc-text-primary);
+        letter-spacing: 2px;
+      }
+      .sc-panel-status {
+        margin-left: auto;
+        font-size: var(--sc-fs-mini);
+        color: var(--sc-success);
+        padding: 1px 8px;
+        border: 1px solid rgba(0, 255, 166, 0.3);
+        border-radius: var(--sc-radius-pill);
+        background: rgba(0, 255, 166, 0.08);
+        white-space: nowrap;
+      }
+
+      /* Panel body */
+      .sc-panel-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      /* === Metric block === */
+      .sc-metric-block {
+        display: flex;
+        align-items: center;
+        gap: var(--sc-space-md);
+        padding: 4px 0;
+      }
+      .sc-metric-icon-ring {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border: 2px solid var(--sc-cyan);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--sc-glow-cyan), inset 0 0 8px rgba(0, 212, 255, 0.1);
+        flex-shrink: 0;
+      }
+      .sc-metric-text {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+      .sc-metric-label {
+        font-size: var(--sc-fs-caption);
+        color: var(--sc-text-secondary);
+        letter-spacing: 1px;
+      }
+      .sc-metric-value {
+        font-family: var(--sc-font-digital);
+        font-size: var(--sc-fs-h1);
+        font-weight: var(--sc-fw-bold);
+        line-height: var(--sc-lh-tight);
+        white-space: nowrap;
+      }
+      .sc-metric-value.cyan {
+        color: var(--sc-cyan);
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+      }
+      .sc-metric-value-small {
+        font-family: var(--sc-font-digital);
+        font-size: var(--sc-fs-h2);
+        font-weight: var(--sc-fw-bold);
+        color: var(--sc-text-primary);
+        text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+        line-height: var(--sc-lh-tight);
+        white-space: nowrap;
+      }
+      .sc-unit {
+        font-size: var(--sc-fs-caption);
+        color: var(--sc-text-secondary);
+        font-family: var(--sc-font-sans);
+        font-weight: var(--sc-fw-regular);
+        margin-left: 4px;
+      }
+
+      /* === Circular gauge (vc-04, vc-06) === */
+      .sc-gauge-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 4px 0;
+      }
+      .sc-gauge-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+      .sc-gauge-circle {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        flex-shrink: 0;
+      }
+      .sc-gauge-circle.magenta {
+        background: conic-gradient(var(--sc-magenta) 0% 45%, rgba(255, 0, 160, 0.08) 45% 100%);
+        box-shadow: 0 0 12px rgba(255, 0, 160, 0.3);
+      }
+      .sc-gauge-circle.cyan {
+        background: conic-gradient(var(--sc-cyan) 0% 40%, rgba(0, 212, 255, 0.08) 40% 100%);
+        box-shadow: 0 0 12px rgba(0, 212, 255, 0.3);
+      }
+      .sc-gauge-circle.cyan.small {
+        background: conic-gradient(var(--sc-cyan) 0% 55%, rgba(0, 212, 255, 0.08) 55% 100%);
+      }
+      .sc-gauge-circle.green {
+        background: conic-gradient(var(--sc-success) 0% 90%, rgba(0, 255, 166, 0.08) 90% 100%);
+        box-shadow: 0 0 12px rgba(0, 255, 166, 0.3);
+      }
+      .sc-gauge-center {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--sc-bg-panel-solid);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--sc-border-soft);
+      }
+      .sc-gauge-number {
+        font-family: var(--sc-font-digital);
+        font-size: var(--sc-fs-h2);
+        font-weight: var(--sc-fw-bold);
+        line-height: 1;
+      }
+      .sc-gauge-circle.magenta .sc-gauge-number {
+        color: var(--sc-magenta-soft);
+        text-shadow: 0 0 8px rgba(255, 0, 160, 0.5);
+      }
+      .sc-gauge-circle.cyan .sc-gauge-number {
+        color: var(--sc-cyan);
+        text-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+      }
+      .sc-gauge-unit {
+        font-size: var(--sc-fs-mini);
+        color: var(--sc-text-secondary);
+        font-family: var(--sc-font-sans);
+        margin-top: 1px;
+      }
+      .sc-gauge-text {
+        font-size: var(--sc-fs-h2);
+        font-weight: var(--sc-fw-bold);
+        color: var(--sc-success);
+        text-shadow: 0 0 8px rgba(0, 255, 166, 0.5);
+      }
+      .sc-gauge-label {
+        font-size: var(--sc-fs-caption);
+        color: var(--sc-text-secondary);
+        letter-spacing: 1px;
+      }
+
+      /* === Chart box === */
+      .sc-chart-box {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+      .sc-chart-title {
+        font-size: var(--sc-fs-caption);
+        color: var(--sc-text-tertiary);
+        margin-bottom: 2px;
+        letter-spacing: 1px;
+        flex-shrink: 0;
+      }
+      .sc-chart-wrap {
+        flex: 1;
+        min-height: 80px;
+        position: relative;
+      }
+      .sc-chart-wrap canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      /* === 3D City (vc-05) === */
+      .sc-city .sc-panel-header { margin-bottom: 0; border-bottom: none; }
+      .sc-city-stage {
+        flex: 1;
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        min-height: 0;
+        overflow: hidden;
+        padding-bottom: 30px;
+      }
+      .sc-city-glow {
+        position: absolute;
+        width: 70%;
+        height: 50%;
+        bottom: 10%;
+        left: 15%;
+        background: radial-gradient(ellipse at center bottom,
+          rgba(0, 128, 255, 0.3) 0%,
+          rgba(0, 212, 255, 0.12) 30%,
+          transparent 70%);
+        border-radius: 50%;
+        filter: blur(15px);
+        animation: city-pulse 4s ease-in-out infinite;
+      }
+      @keyframes city-pulse {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; }
+      }
+      .sc-city-rings {
+        position: absolute;
+        width: 60%;
+        height: 30%;
+        bottom: 15%;
+        left: 20%;
+        border-radius: 50%;
+        border: 1px solid var(--sc-border-soft);
+        box-shadow:
+          0 0 0 15px rgba(0, 212, 255, 0.03),
+          0 0 0 30px rgba(0, 212, 255, 0.02);
+        pointer-events: none;
+      }
+      .sc-city-radar {
+        position: absolute;
+        width: 70%;
+        height: 40%;
+        bottom: 10%;
+        left: 15%;
+        border-radius: 50%;
+        background: conic-gradient(from 0deg, transparent 0deg, rgba(0, 212, 255, 0.12) 30deg, transparent 60deg);
+        animation: radar-scan 4s linear infinite;
+        pointer-events: none;
+      }
+      @keyframes radar-scan {
+        to { transform: rotate(360deg); }
+      }
+      .sc-city-buildings {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 3px;
+        transform: perspective(600px) rotateX(8deg);
+      }
+      .sc-building {
+        background: linear-gradient(180deg,
+          rgba(0, 212, 255, 0.35) 0%,
+          rgba(0, 128, 255, 0.18) 50%,
+          rgba(0, 72, 176, 0.1) 100%);
+        border: 1px solid rgba(0, 212, 255, 0.4);
+        border-bottom: none;
+        position: relative;
+        box-shadow:
+          0 0 8px rgba(0, 212, 255, 0.2),
+          inset 0 0 8px rgba(0, 128, 255, 0.1);
+        flex-shrink: 0;
+      }
+      .sc-building::before {
+        content: '';
+        position: absolute;
+        inset: 3px;
+        background-image: radial-gradient(circle, rgba(0, 212, 255, 0.5) 1px, transparent 1px);
+        background-size: 5px 7px;
+        opacity: 0.5;
+      }
+      .sc-building::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--sc-cyan);
+        box-shadow: 0 0 5px var(--sc-cyan);
+      }
+      .sc-arteries {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 2;
+      }
+      .sc-artery-path {
+        filter: drop-shadow(0 0 3px rgba(255, 0, 160, 0.5));
+        stroke-dasharray: 8 5;
+        animation: artery-flow 2s linear infinite;
+      }
+      @keyframes artery-flow {
+        to { stroke-dashoffset: -26; }
+      }
+      .sc-hex-marker {
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        background: rgba(0, 212, 255, 0.15);
+        border: 1px solid var(--sc-cyan);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 3;
+        box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+        animation: hex-float 3s ease-in-out infinite;
+      }
+      .sc-hex-marker.m1 { top: 20%; left: 32%; }
+      .sc-hex-marker.m2 { top: 35%; right: 28%; animation-delay: 1s; }
+      .sc-hex-marker.m3 { top: 15%; left: 55%; animation-delay: 2s; }
+      @keyframes hex-float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+      }
+      .sc-city-label {
+        position: absolute;
+        bottom: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: var(--sc-fs-mini);
+        color: var(--sc-text-tertiary);
+        font-family: var(--sc-font-mono);
+        letter-spacing: 2px;
+        white-space: nowrap;
+        z-index: 3;
+      }
+
+      /* === Noise section === */
+      .sc-noise-block { display: flex; flex-direction: column; gap: 4px; }
+      .sc-noise-gauges {
+        display: flex;
+        align-items: center;
+        gap: var(--sc-space-md);
+        justify-content: space-around;
+        padding: 4px 0;
+      }
+      .sc-vbar-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+      }
+      .sc-vbar {
+        width: 10px;
+        height: 72px;
+        background: rgba(0, 212, 255, 0.08);
+        border: 1px solid var(--sc-border-soft);
+        border-radius: var(--sc-radius-sm);
+        overflow: hidden;
+        display: flex;
+        align-items: flex-end;
+      }
+      .sc-vbar-fill {
+        width: 100%;
+        height: 42%;
+        background: linear-gradient(180deg, var(--sc-magenta) 0%, var(--sc-cyan) 100%);
+        box-shadow: 0 0 6px rgba(0, 212, 255, 0.4);
+      }
+      .sc-vbar-label {
+        font-size: var(--sc-fs-mini);
+        color: var(--sc-text-tertiary);
+      }
+
+      /* === Bottom indicator cards (vc-07) === */
+      .sc-bottom {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+      .sc-indicator-card {
+        display: flex;
+        align-items: center;
+        gap: var(--sc-space-md);
+        padding: 8px 14px;
+        background: var(--sc-gradient-panel);
+        border: 1px solid var(--sc-border-cyan);
+        border-radius: var(--sc-radius-md);
+        position: relative;
+        box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.04);
+        box-sizing: border-box;
+      }
+      .sc-indicator-card::before,
+      .sc-indicator-card::after {
+        content: '';
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-color: var(--sc-cyan);
+        border-style: solid;
+        pointer-events: none;
+      }
+      .sc-indicator-card::before {
+        top: -1px;
+        left: -1px;
+        border-width: 2px 0 0 2px;
+      }
+      .sc-indicator-card::after {
+        bottom: -1px;
+        right: -1px;
+        border-width: 0 2px 2px 0;
+      }
+      .sc-hex-icon {
+        width: 44px;
+        height: 44px;
+        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.25), rgba(0, 128, 255, 0.1));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.4));
+      }
+      .sc-hex-icon.magenta {
+        background: linear-gradient(135deg, rgba(255, 0, 160, 0.25), rgba(123, 60, 255, 0.1));
+        filter: drop-shadow(0 0 5px rgba(255, 0, 160, 0.4));
+      }
+      .sc-indicator-info {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+      .sc-indicator-value {
+        font-family: var(--sc-font-digital);
+        font-size: var(--sc-fs-h1);
+        font-weight: var(--sc-fw-bold);
+        color: var(--sc-cyan);
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        line-height: var(--sc-lh-tight);
+        white-space: nowrap;
+      }
+      .sc-indicator-value.magenta {
+        color: var(--sc-magenta-soft);
+        text-shadow: 0 0 10px rgba(255, 0, 160, 0.5);
+      }
+      .sc-indicator-label {
+        font-size: var(--sc-fs-caption);
+        color: var(--sc-text-secondary);
+        letter-spacing: 2px;
+        margin-top: 2px;
+      }
+
+      /* === Reduced motion (Gate 6.5) === */
+      @media (prefers-reduced-motion: reduce) {
+        .sc-artery-path,
+        .sc-hex-marker,
+        .sc-city-glow,
+        .sc-city-radar {
+          animation: none;
+        }
+        * { transition: none !important; }
+      }
+    </style>
+    <script>
+      // Chart.js global defaults
+      Chart.defaults.font.family = '"PingFang SC", "Microsoft YaHei", sans-serif';
+      Chart.defaults.color = '#8fb3d9';
+      Chart.defaults.borderColor = 'rgba(143, 179, 217, 0.06)';
+
+      var chartLabels = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'];
+
+      // Speed chart (left panel) — cyan fill (vc-04)
+      var speedCtx = document.getElementById('speedChart');
+      new Chart(speedCtx, {
+        type: 'line',
+        data: {
+          labels: chartLabels,
+          datasets: [{
+            data: [55, 60, 25, 40, 35, 45, 55],
+            borderColor: '#00d4ff',
+            backgroundColor: 'rgba(0, 212, 255, 0.25)',
+            fill: true,
+            tension: 0.4,
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            pointHoverBackgroundColor: '#00d4ff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          scales: {
+            x: {
+              grid: { color: 'rgba(143, 179, 217, 0.05)' },
+              ticks: { font: { size: 10 }, color: '#5a7da6' },
+              border: { display: false }
+            },
+            y: {
+              grid: { color: 'rgba(143, 179, 217, 0.05)' },
+              ticks: { display: false },
+              border: { display: false },
+              min: 0,
+              max: 70
+            }
+          }
+        }
+      });
+
+      // Noise chart (right panel) — magenta/cyan tint (vc-06)
+      var noiseCtx = document.getElementById('noiseChart');
+      new Chart(noiseCtx, {
+        type: 'line',
+        data: {
+          labels: chartLabels,
+          datasets: [{
+            data: [38, 35, 52, 48, 50, 45, 40],
+            borderColor: '#ff6b9d',
+            backgroundColor: 'rgba(255, 107, 157, 0.2)',
+            fill: true,
+            tension: 0.4,
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            pointHoverBackgroundColor: '#ff6b9d'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          scales: {
+            x: {
+              grid: { color: 'rgba(143, 179, 217, 0.05)' },
+              ticks: { font: { size: 10 }, color: '#5a7da6' },
+              border: { display: false }
+            },
+            y: {
+              grid: { color: 'rgba(143, 179, 217, 0.05)' },
+              ticks: { display: false },
+              border: { display: false },
+              min: 30,
+              max: 60
+            }
+          }
+        }
+      });
+
+      lucide.createIcons();
+    </script>
+</body>
+</html>

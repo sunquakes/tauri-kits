@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图表总览</title>
+    <style id="theme-vars">
+/* Smart City Dashboard — Brand Colors & Type
+   Derived from reference: deep navy/black background, electric blue,
+   magenta/pink, cyan accents. Futuristic HUD / data-screen aesthetic. */
+
+:root {
+  /* ===== Surface / Background ===== */
+  --sc-bg-primary: #050b1a;
+  --sc-bg-secondary: #0a1530;
+  --sc-bg-panel: rgba(10, 24, 56, 0.55);
+  --sc-bg-panel-solid: #0c1a3a;
+  --sc-bg-overlay: rgba(5, 11, 26, 0.85);
+
+  /* ===== Brand Hues ===== */
+  --sc-cyan: #00d4ff;
+  --sc-cyan-soft: #4fe2ff;
+  --sc-blue: #0080ff;
+  --sc-blue-deep: #0048b0;
+  --sc-magenta: #ff00a0;
+  --sc-magenta-soft: #ff6b9d;
+  --sc-purple: #7b3cff;
+  --sc-gold: #ffcc00;
+
+  /* ===== Semantic States ===== */
+  --sc-success: #00ffa6;
+  --sc-warning: #ffcc00;
+  --sc-danger: #ff3b5c;
+  --sc-info: #00d4ff;
+
+  /* ===== Text ===== */
+  --sc-text-primary: #e8f4ff;
+  --sc-text-secondary: #8fb3d9;
+  --sc-text-tertiary: #5a7da6;
+  --sc-text-accent: #00d4ff;
+  --sc-text-magenta: #ff6b9d;
+
+  /* ===== Border / Divider ===== */
+  --sc-border-cyan: rgba(0, 212, 255, 0.35);
+  --sc-border-soft: rgba(0, 212, 255, 0.15);
+  --sc-divider: rgba(143, 179, 217, 0.12);
+
+  /* ===== Glow ===== */
+  --sc-glow-cyan: 0 0 12px rgba(0, 212, 255, 0.6);
+  --sc-glow-magenta: 0 0 12px rgba(255, 0, 160, 0.55);
+  --sc-glow-blue: 0 0 16px rgba(0, 128, 255, 0.5);
+
+  /* ===== Gradients ===== */
+  --sc-gradient-cyan-magenta: linear-gradient(90deg, #00d4ff 0%, #7b3cff 50%, #ff00a0 100%);
+  --sc-gradient-panel: linear-gradient(180deg, rgba(0, 212, 255, 0.08) 0%, rgba(10, 24, 56, 0.6) 100%);
+  --sc-gradient-header: linear-gradient(90deg, transparent 0%, rgba(0, 212, 255, 0.25) 50%, transparent 100%);
+
+  /* ===== Typography ===== */
+  --sc-font-sans: "PingFang SC", "Microsoft YaHei", "HarmonyOS Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --sc-font-digital: "DIN Alternate", "Bahnschrift", "Impact", "PingFang SC", sans-serif;
+  --sc-font-mono: "JetBrains Mono", "Consolas", "Courier New", monospace;
+
+  /* Type scale (dashboard large screen) */
+  --sc-fs-display: 56px;
+  --sc-fs-h1: 32px;
+  --sc-fs-h2: 22px;
+  --sc-fs-h3: 18px;
+  --sc-fs-body: 14px;
+  --sc-fs-caption: 12px;
+  --sc-fs-mini: 10px;
+
+  /* Weight */
+  --sc-fw-regular: 400;
+  --sc-fw-medium: 500;
+  --sc-fw-semibold: 600;
+  --sc-fw-bold: 700;
+
+  /* Line height */
+  --sc-lh-tight: 1.2;
+  --sc-lh-normal: 1.5;
+
+  /* ===== Radius ===== */
+  --sc-radius-sm: 4px;
+  --sc-radius-md: 8px;
+  --sc-radius-lg: 12px;
+  --sc-radius-pill: 999px;
+
+  /* ===== Spacing ===== */
+  --sc-space-xs: 4px;
+  --sc-space-sm: 8px;
+  --sc-space-md: 16px;
+  --sc-space-lg: 24px;
+  --sc-space-xl: 32px;
+
+  /* ===== Semantic Aliases (for fill-html-head.mjs / Tailwind bridge) ===== */
+  --sc-background: var(--sc-bg-primary);
+  --sc-foreground: var(--sc-text-primary);
+  --sc-card: var(--sc-bg-panel);
+  --sc-card-foreground: var(--sc-text-primary);
+  --sc-popover: var(--sc-bg-panel-solid);
+  --sc-popover-foreground: var(--sc-text-primary);
+  --sc-primary: var(--sc-cyan);
+  --sc-primary-foreground: var(--sc-bg-primary);
+  --sc-secondary: var(--sc-blue-deep);
+  --sc-secondary-foreground: var(--sc-text-primary);
+  --sc-muted: var(--sc-bg-secondary);
+  --sc-muted-foreground: var(--sc-text-secondary);
+  --sc-accent: var(--sc-magenta);
+  --sc-accent-foreground: var(--sc-text-primary);
+  --sc-destructive: var(--sc-danger);
+  --sc-destructive-foreground: var(--sc-text-primary);
+  --sc-border: var(--sc-border-cyan);
+  --sc-input: var(--sc-border-cyan);
+  --sc-ring: var(--sc-cyan);
+  --sc-radius: var(--sc-radius-md);
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--sc-background);
+    --color-foreground: var(--sc-foreground);
+    --color-card: var(--sc-card);
+    --color-card-foreground: var(--sc-card-foreground);
+    --color-popover: var(--sc-popover);
+    --color-popover-foreground: var(--sc-popover-foreground);
+    --color-primary: var(--sc-primary);
+    --color-primary-foreground: var(--sc-primary-foreground);
+    --color-secondary: var(--sc-secondary);
+    --color-secondary-foreground: var(--sc-secondary-foreground);
+    --color-muted: var(--sc-muted);
+    --color-muted-foreground: var(--sc-muted-foreground);
+    --color-accent: var(--sc-accent);
+    --color-accent-foreground: var(--sc-accent-foreground);
+    --color-destructive: var(--sc-destructive);
+    --color-destructive-foreground: var(--sc-destructive-foreground);
+    --color-border: var(--sc-border);
+    --color-input: var(--sc-input);
+    --color-ring: var(--sc-ring);
+    --radius-sm: var(--sc-radius-sm);
+    --radius-md: var(--sc-radius-md);
+    --radius-lg: var(--sc-radius-lg);
+  }
+  @layer base {
+    body { background: var(--sc-background); color: var(--sc-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--sc-background); }
+      .text-background { color: var(--sc-background); }
+      .border-background { border-color: var(--sc-background); }
+      .ring-background { --tw-ring-color: var(--sc-background); }
+      .bg-foreground { background-color: var(--sc-foreground); }
+      .text-foreground { color: var(--sc-foreground); }
+      .border-foreground { border-color: var(--sc-foreground); }
+      .ring-foreground { --tw-ring-color: var(--sc-foreground); }
+      .bg-card { background-color: var(--sc-card); }
+      .text-card { color: var(--sc-card); }
+      .border-card { border-color: var(--sc-card); }
+      .ring-card { --tw-ring-color: var(--sc-card); }
+      .bg-card-foreground { background-color: var(--sc-card-foreground); }
+      .text-card-foreground { color: var(--sc-card-foreground); }
+      .border-card-foreground { border-color: var(--sc-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--sc-card-foreground); }
+      .bg-popover { background-color: var(--sc-popover); }
+      .text-popover { color: var(--sc-popover); }
+      .border-popover { border-color: var(--sc-popover); }
+      .ring-popover { --tw-ring-color: var(--sc-popover); }
+      .bg-popover-foreground { background-color: var(--sc-popover-foreground); }
+      .text-popover-foreground { color: var(--sc-popover-foreground); }
+      .border-popover-foreground { border-color: var(--sc-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--sc-popover-foreground); }
+      .bg-primary { background-color: var(--sc-primary); }
+      .text-primary { color: var(--sc-primary); }
+      .border-primary { border-color: var(--sc-primary); }
+      .ring-primary { --tw-ring-color: var(--sc-primary); }
+      .bg-primary-foreground { background-color: var(--sc-primary-foreground); }
+      .text-primary-foreground { color: var(--sc-primary-foreground); }
+      .border-primary-foreground { border-color: var(--sc-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--sc-primary-foreground); }
+      .bg-secondary { background-color: var(--sc-secondary); }
+      .text-secondary { color: var(--sc-secondary); }
+      .border-secondary { border-color: var(--sc-secondary); }
+      .ring-secondary { --tw-ring-color: var(--sc-secondary); }
+      .bg-secondary-foreground { background-color: var(--sc-secondary-foreground); }
+      .text-secondary-foreground { color: var(--sc-secondary-foreground); }
+      .border-secondary-foreground { border-color: var(--sc-secondary-foreground); }
+      .ring-secondary-foreground { --tw-ring-color: var(--sc-secondary-foreground); }
+      .bg-muted { background-color: var(--sc-muted); }
+      .text-muted { color: var(--sc-muted); }
+      .border-muted { border-color: var(--sc-muted); }
+      .ring-muted { --tw-ring-color: var(--sc-muted); }
+      .bg-muted-foreground { background-color: var(--sc-muted-foreground); }
+      .text-muted-foreground { color: var(--sc-muted-foreground); }
+      .border-muted-foreground { border-color: var(--sc-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--sc-muted-foreground); }
+      .bg-accent { background-color: var(--sc-accent); }
+      .text-accent { color: var(--sc-accent); }
+      .border-accent { border-color: var(--sc-accent); }
+      .ring-accent { --tw-ring-color: var(--sc-accent); }
+      .bg-accent-foreground { background-color: var(--sc-accent-foreground); }
+      .text-accent-foreground { color: var(--sc-accent-foreground); }
+      .border-accent-foreground { border-color: var(--sc-accent-foreground); }
+      .ring-accent-foreground { --tw-ring-color: var(--sc-accent-foreground); }
+      .bg-destructive { background-color: var(--sc-destructive); }
+      .text-destructive { color: var(--sc-destructive); }
+      .border-destructive { border-color: var(--sc-destructive); }
+      .ring-destructive { --tw-ring-color: var(--sc-destructive); }
+      .bg-destructive-foreground { background-color: var(--sc-destructive-foreground); }
+      .text-destructive-foreground { color: var(--sc-destructive-foreground); }
+      .border-destructive-foreground { border-color: var(--sc-destructive-foreground); }
+      .ring-destructive-foreground { --tw-ring-color: var(--sc-destructive-foreground); }
+      .bg-border { background-color: var(--sc-border); }
+      .text-border { color: var(--sc-border); }
+      .border-border { border-color: var(--sc-border); }
+      .ring-border { --tw-ring-color: var(--sc-border); }
+      .bg-input { background-color: var(--sc-input); }
+      .text-input { color: var(--sc-input); }
+      .border-input { border-color: var(--sc-input); }
+      .ring-input { --tw-ring-color: var(--sc-input); }
+      .bg-ring { background-color: var(--sc-ring); }
+      .text-ring { color: var(--sc-ring); }
+      .border-ring { border-color: var(--sc-ring); }
+      .ring-ring { --tw-ring-color: var(--sc-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <main>
+      <div class="sc-shell overflow-y-auto no-scrollbar" data-viewport-mode="app-shell" data-scroll-region="primary">
+        <!-- ===== Admin Back Button ===== -->
+        <a href="../admin.html" class="sc-admin-btn" data-dom-id="back-admin" title="返回 Admin 首页">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Admin</span>
+        </a>
+        <!-- ===== HEADER ===== -->
+        <header class="sc-header">
+          <div class="sc-header-deco left">
+            <span class="deco-diamond"></span>
+            <span class="deco-line"></span>
+            <span class="deco-bar"></span>
+          </div>
+          <div class="sc-header-title-block">
+            <span class="sc-header-corner tl"></span>
+            <span class="sc-header-corner tr"></span>
+            <span class="sc-header-corner bl"></span>
+            <span class="sc-header-corner br"></span>
+            <h1 class="sc-header-title">图表总览</h1>
+            <p class="sc-header-subtitle">柱状图 · 折线图 · 饼图 · 雷达图 · 面积图 · 环形图</p>
+          </div>
+          <div class="sc-header-deco right">
+            <span class="deco-bar"></span>
+            <span class="deco-line"></span>
+            <span class="deco-diamond"></span>
+          </div>
+        </header>
+
+        <!-- ===== CHARTS GRID (3 rows) ===== -->
+        <div class="sc-charts-grid">
+          <!-- Row 1 -->
+          <section class="sc-panel sc-chart-card span2">
+            <div class="sc-panel-header">
+              <span class="sc-chart-icon"><i data-lucide="bar-chart-3" style="width:13px;height:13px;color:var(--sc-cyan);"></i></span>
+              <span class="sc-panel-title">区域能耗对比</span>
+              <span class="sc-panel-tag">能耗 · GJ</span>
+            </div>
+            <div class="sc-chart-body">
+              <div class="sc-chart-wrap"><canvas id="barChart" width="400" height="220"></canvas></div>
+            </div>
+          </section>
+
+          <section class="sc-panel sc-chart-card span2">
+            <div class="sc-panel-header">
+              <span class="sc-chart-icon"><i data-lucide="trending-up" style="width:13px;height:13px;color:var(--sc-cyan);"></i></span>
+              <span class="sc-panel-title">人口流动趋势</span>
+              <span class="sc-panel-tag">万人次</span>
+            </div>
+            <div class="sc-chart-body">
+              <div class="sc-chart-wrap"><canvas id="lineChart" width="400" height="220"></canvas></div>
+            </div>
+          </section>
+
+          <section class="sc-panel sc-chart-card span2">
+            <div class="sc-panel-header">
+              <span class="sc-chart-icon magenta"><i data-lucide="pie-chart" style="width:13px;height:13px;color:var(--sc-magenta-soft);"></i></span>
+              <span class="sc-panel-title">产业占比</span>
+              <span class="sc-panel-tag magenta">占比 %</span>
+            </div>
+            <div class="sc-chart-body">
+              <div class="sc-chart-wrap"><canvas id="pieChart" width="400" height="220"></canvas></div>
+            </div>
+          </section>
+
+          <!-- Row 2 -->
+          <section class="sc-panel sc-chart-card span2">
+            <div class="sc-panel-header">
+              <span class="sc-chart-icon"><i data-lucide="radar" style="width:13px;height:13px;color:var(--sc-cyan);"></i></span>
+              <span class="sc-panel-title">城市能力评估</span>
+              <span class="sc-panel-tag">评分 / 100</span>
+            </div>
+            <div class="sc-chart-body">
+              <div class="sc-chart-wrap"><canvas id="radarChart" width="400" height="220"></canvas></div>
+            </div>
+          </section>
+
+          <section class="sc-panel sc-chart-card span2">
+            <div class="sc-panel-header">
+              <span class="sc-chart-icon"><i data-lucide="activity" style="width:13px;height:13px;color:var(--sc-cyan);"></i></span>
+              <span class="sc-panel-title">空气质量趋势</span>
+              <span class="sc-panel-tag">PM2.5 μg/m³</span>
+            </div>
+            <div class="sc-chart-body">
+              <div class="sc-chart-wrap"><canvas id="areaChart" width="400" height="220"></canvas></div>
+            </div>
+          </section>
+
+          <section class="sc-panel sc-chart-card span2">
+            <div class="sc-panel-header">
+              <span class="sc-chart-icon magenta"><i data-lucide="circle-dot" style="width:13px;height:13px;color:var(--sc-magenta-soft);"></i></span>
+              <span class="sc-panel-title">交通方式构成</span>
+              <span class="sc-panel-tag magenta">出行 %</span>
+            </div>
+            <div class="sc-chart-body">
+              <div class="sc-chart-wrap"><canvas id="doughnutChart" width="400" height="220"></canvas></div>
+            </div>
+          </section>
+
+          <!-- Row 3 -->
+          <section class="sc-panel sc-chart-card span3">
+            <div class="sc-panel-header">
+              <span class="sc-chart-icon magenta"><i data-lucide="bar-chart-2" style="width:13px;height:13px;color:var(--sc-magenta-soft);"></i></span>
+              <span class="sc-panel-title">各区事件预警数</span>
+              <span class="sc-panel-tag magenta">预警 · 起</span>
+            </div>
+            <div class="sc-chart-body">
+              <div class="sc-chart-wrap"><canvas id="hbarChart" width="600" height="220"></canvas></div>
+            </div>
+          </section>
+
+          <section class="sc-panel sc-chart-card span3">
+            <div class="sc-panel-header">
+              <span class="sc-chart-icon"><i data-lucide="compass" style="width:13px;height:13px;color:var(--sc-cyan);"></i></span>
+              <span class="sc-panel-title">噪声分布</span>
+              <span class="sc-panel-tag">噪声 · dB</span>
+            </div>
+            <div class="sc-chart-body">
+              <div class="sc-chart-wrap"><canvas id="polarChart" width="600" height="220"></canvas></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <style>
+      /* === Body fixed viewport (app-shell) === */
+      body.min-h-screen { min-height: 0; }
+      body {
+        margin: 0;
+        height: 100vh;
+        overflow: hidden;
+        font-family: var(--sc-font-sans);
+        background: var(--sc-bg-primary);
+        position: relative;
+      }
+      /* Background grid texture */
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(var(--sc-border-soft) 1px, transparent 1px),
+          linear-gradient(90deg, var(--sc-border-soft) 1px, transparent 1px);
+        background-size: 40px 40px;
+        opacity: 0.4;
+        pointer-events: none;
+        z-index: 0;
+      }
+      /* Radial glow spots */
+      body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(ellipse at 20% 30%, rgba(0, 212, 255, 0.08), transparent 50%),
+          radial-gradient(ellipse at 80% 70%, rgba(255, 0, 160, 0.06), transparent 50%),
+          radial-gradient(ellipse at 50% 50%, rgba(0, 128, 255, 0.04), transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* === Shell === */
+      .sc-shell {
+        position: relative;
+        z-index: 1;
+        width: 100vw;
+        height: 100vh;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 8px;
+        padding: 8px 10px;
+        box-sizing: border-box;
+      }
+
+      /* === Admin Back Button === */
+      .sc-admin-btn {
+        position: absolute;
+        top: 10px;
+        right: 14px;
+        z-index: 50;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 14px;
+        font-family: var(--sc-font-sans);
+        font-size: var(--sc-fs-caption);
+        font-weight: var(--sc-fw-semibold);
+        color: var(--sc-cyan);
+        text-decoration: none;
+        letter-spacing: 0.5px;
+        background: rgba(0, 212, 255, 0.08);
+        border: 1px solid var(--sc-border-cyan);
+        border-radius: var(--sc-radius-sm);
+        box-shadow: var(--sc-glow-cyan);
+        transition: all 0.2s ease;
+        white-space: nowrap;
+      }
+      .sc-admin-btn svg { flex-shrink: 0; }
+      .sc-admin-btn:hover {
+        color: var(--sc-text-primary);
+        background: rgba(0, 212, 255, 0.2);
+        border-color: var(--sc-cyan);
+        box-shadow: 0 0 18px rgba(0, 212, 255, 0.8);
+      }
+
+      /* === Header === */
+      .sc-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--sc-space-md);
+        padding: 4px 0;
+      }
+      .sc-header-deco {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex: 1;
+      }
+      .sc-header-deco.left { justify-content: flex-end; }
+      .sc-header-deco.right { justify-content: flex-start; }
+      .deco-line {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--sc-cyan));
+        flex: 1;
+        max-width: 180px;
+        opacity: 0.7;
+      }
+      .sc-header-deco.right .deco-line {
+        background: linear-gradient(90deg, var(--sc-cyan), transparent);
+      }
+      .deco-diamond {
+        width: 8px;
+        height: 8px;
+        background: var(--sc-cyan);
+        box-shadow: var(--sc-glow-cyan);
+        transform: rotate(45deg);
+        flex-shrink: 0;
+      }
+      .deco-bar {
+        width: 3px;
+        height: 20px;
+        background: linear-gradient(180deg, var(--sc-cyan), transparent);
+        flex-shrink: 0;
+        opacity: 0.6;
+      }
+      .sc-header-title-block {
+        text-align: center;
+        padding: 6px 48px;
+        position: relative;
+        background: linear-gradient(180deg, rgba(0, 212, 255, 0.06) 0%, transparent 100%);
+      }
+      .sc-header-corner {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-color: var(--sc-cyan);
+        border-style: solid;
+      }
+      .sc-header-corner.tl { top: 0; left: 0; border-width: 2px 0 0 2px; }
+      .sc-header-corner.tr { top: 0; right: 0; border-width: 2px 2px 0 0; }
+      .sc-header-corner.bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+      .sc-header-corner.br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+      .sc-header-title {
+        font-size: clamp(22px, 2.4vw, var(--sc-fs-display));
+        font-weight: var(--sc-fw-bold);
+        font-family: var(--sc-font-sans);
+        background: linear-gradient(180deg, var(--sc-text-primary) 0%, var(--sc-cyan) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: 6px;
+        margin: 0;
+        line-height: var(--sc-lh-tight);
+        text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        white-space: nowrap;
+      }
+      .sc-header-subtitle {
+        font-size: var(--sc-fs-caption);
+        color: var(--sc-text-secondary);
+        margin: 2px 0 0 0;
+        letter-spacing: 3px;
+        white-space: nowrap;
+      }
+
+      /* === Charts grid (6-col base: row1/2 = 3x span2, row3 = 2x span3) === */
+      .sc-charts-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        min-height: 0;
+      }
+      .sc-chart-card.span2 { grid-column: span 2; }
+      .sc-chart-card.span3 { grid-column: span 3; }
+
+      /* === Panel base === */
+      .sc-panel {
+        background: var(--sc-gradient-panel);
+        border: 1px solid var(--sc-border-cyan);
+        border-radius: var(--sc-radius-md);
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        position: relative;
+        box-shadow: inset 0 0 30px rgba(0, 212, 255, 0.04);
+        box-sizing: border-box;
+      }
+      /* Four L-shaped corner marks */
+      .sc-panel::before,
+      .sc-panel::after {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-color: var(--sc-cyan);
+        border-style: solid;
+        pointer-events: none;
+      }
+      .sc-panel::before {
+        top: -1px;
+        left: -1px;
+        border-width: 2px 0 0 2px;
+      }
+      .sc-panel::after {
+        bottom: -1px;
+        right: -1px;
+        border-width: 0 2px 2px 0;
+      }
+
+      /* Panel header */
+      .sc-panel-header {
+        display: flex;
+        align-items: center;
+        gap: var(--sc-space-sm);
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--sc-divider);
+        margin-bottom: 6px;
+        flex-shrink: 0;
+      }
+      .sc-chart-icon {
+        width: 22px;
+        height: 22px;
+        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(0, 128, 255, 0.12));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        filter: drop-shadow(0 0 4px rgba(0, 212, 255, 0.4));
+      }
+      .sc-chart-icon.magenta {
+        background: linear-gradient(135deg, rgba(255, 0, 160, 0.3), rgba(123, 60, 255, 0.12));
+        filter: drop-shadow(0 0 4px rgba(255, 0, 160, 0.4));
+      }
+      .sc-panel-title {
+        font-size: var(--sc-fs-h3);
+        font-weight: var(--sc-fw-semibold);
+        color: var(--sc-text-primary);
+        letter-spacing: 2px;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .sc-panel-tag {
+        margin-left: auto;
+        font-size: var(--sc-fs-mini);
+        color: var(--sc-text-secondary);
+        padding: 2px 8px;
+        border: 1px solid var(--sc-border-soft);
+        border-radius: var(--sc-radius-pill);
+        background: rgba(0, 212, 255, 0.06);
+        white-space: nowrap;
+        font-family: var(--sc-font-mono);
+        letter-spacing: 1px;
+        flex-shrink: 0;
+      }
+      .sc-panel-tag.magenta {
+        color: var(--sc-magenta-soft);
+        border-color: rgba(255, 0, 160, 0.3);
+        background: rgba(255, 0, 160, 0.06);
+      }
+
+      /* Chart body */
+      .sc-chart-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+      .sc-chart-wrap {
+        flex: 1;
+        min-height: 120px;
+        position: relative;
+      }
+      .sc-chart-wrap canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      /* === Reduced motion === */
+      @media (prefers-reduced-motion: reduce) {
+        * { transition: none !important; animation: none !important; }
+      }
+    </style>
+    <script>
+      // ===== Chart.js global defaults =====
+      Chart.defaults.font.family = '"PingFang SC", "Microsoft YaHei", sans-serif';
+      Chart.defaults.color = '#8fb3d9';
+      Chart.defaults.borderColor = 'rgba(143, 179, 217, 0.08)';
+
+      var tickColor = '#5a7da6';
+      var gridColor = 'rgba(143, 179, 217, 0.08)';
+      var legendColor = '#8fb3d9';
+
+      var baseTooltip = {
+        backgroundColor: 'rgba(5, 11, 26, 0.9)',
+        borderColor: 'rgba(0, 212, 255, 0.35)',
+        borderWidth: 1,
+        titleColor: '#e8f4ff',
+        bodyColor: '#8fb3d9',
+        titleFont: { size: 12 },
+        bodyFont: { size: 12 },
+        padding: 10,
+        cornerRadius: 4,
+        displayColors: true,
+        boxPadding: 4
+      };
+      var baseScales = {
+        x: {
+          grid: { color: gridColor },
+          ticks: { font: { size: 10 }, color: tickColor },
+          border: { display: false }
+        },
+        y: {
+          grid: { color: gridColor },
+          ticks: { font: { size: 10 }, color: tickColor },
+          border: { display: false }
+        }
+      };
+      var bottomLegend = {
+        display: true,
+        position: 'bottom',
+        labels: { color: legendColor, font: { size: 10 }, boxWidth: 12, boxHeight: 8, padding: 8 }
+      };
+      var rightLegend = {
+        display: true,
+        position: 'right',
+        labels: { color: legendColor, font: { size: 10 }, boxWidth: 10, boxHeight: 10, padding: 6 }
+      };
+
+      // Gradient helpers (evaluated at draw time when chartArea exists)
+      function vBarGrad(context) {
+        var chart = context.chart;
+        var area = chart.chartArea;
+        if (!area) return 'rgba(0, 212, 255, 0.8)';
+        var g = chart.ctx.createLinearGradient(0, area.bottom, 0, area.top);
+        g.addColorStop(0, 'rgba(255, 0, 160, 0.55)');
+        g.addColorStop(1, 'rgba(0, 212, 255, 0.95)');
+        return g;
+      }
+      function hBarGrad(context) {
+        var chart = context.chart;
+        var area = chart.chartArea;
+        if (!area) return 'rgba(255, 0, 160, 0.8)';
+        var g = chart.ctx.createLinearGradient(area.left, 0, area.right, 0);
+        g.addColorStop(0, 'rgba(255, 0, 160, 0.95)');
+        g.addColorStop(1, 'rgba(123, 60, 255, 0.6)');
+        return g;
+      }
+
+      // ===== 1. Bar — 区域能耗对比 =====
+      new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+          labels: ['朝阳', '海淀', '丰台', '通州', '顺义', '大兴'],
+          datasets: [{
+            label: '能耗',
+            data: [820, 950, 610, 540, 480, 420],
+            backgroundColor: vBarGrad,
+            borderColor: 'rgba(0, 212, 255, 0.6)',
+            borderWidth: 1,
+            borderRadius: 4,
+            barPercentage: 0.62,
+            categoryPercentage: 0.7
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: baseTooltip },
+          scales: baseScales
+        }
+      });
+
+      // ===== 2. Line — 人口流动趋势 =====
+      new Chart(document.getElementById('lineChart'), {
+        type: 'line',
+        data: {
+          labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+          datasets: [
+            {
+              label: '流入',
+              data: [32, 28, 35, 42, 48, 55, 60, 58, 52, 46, 40, 36],
+              borderColor: '#00d4ff',
+              backgroundColor: 'rgba(0, 212, 255, 0.1)',
+              tension: 0.4,
+              borderWidth: 2,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              pointHoverBackgroundColor: '#00d4ff',
+              fill: false
+            },
+            {
+              label: '流出',
+              data: [28, 30, 32, 38, 44, 50, 56, 54, 48, 42, 38, 34],
+              borderColor: '#ff00a0',
+              backgroundColor: 'rgba(255, 0, 160, 0.1)',
+              tension: 0.4,
+              borderWidth: 2,
+              borderDash: [6, 4],
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              pointHoverBackgroundColor: '#ff00a0',
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: bottomLegend, tooltip: baseTooltip },
+          scales: baseScales
+        }
+      });
+
+      // ===== 3. Pie — 产业占比 =====
+      new Chart(document.getElementById('pieChart'), {
+        type: 'pie',
+        data: {
+          labels: ['服务业', '制造业', '金融业', '科技业', '农业'],
+          datasets: [{
+            data: [38, 24, 16, 14, 8],
+            backgroundColor: [
+              'rgba(0, 212, 255, 0.82)',
+              'rgba(255, 0, 160, 0.82)',
+              'rgba(123, 60, 255, 0.82)',
+              'rgba(0, 255, 166, 0.82)',
+              'rgba(255, 204, 0, 0.82)'
+            ],
+            borderColor: '#0c1a3a',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: rightLegend, tooltip: baseTooltip }
+        }
+      });
+
+      // ===== 4. Radar — 城市能力评估 =====
+      new Chart(document.getElementById('radarChart'), {
+        type: 'radar',
+        data: {
+          labels: ['交通', '环境', '能源', '安全', '教育', '医疗'],
+          datasets: [
+            {
+              label: '本年',
+              data: [88, 76, 82, 90, 70, 85],
+              borderColor: '#00d4ff',
+              backgroundColor: 'rgba(0, 212, 255, 0.2)',
+              borderWidth: 2,
+              pointBackgroundColor: '#00d4ff',
+              pointRadius: 3,
+              pointHoverRadius: 5
+            },
+            {
+              label: '去年',
+              data: [78, 68, 74, 82, 65, 78],
+              borderColor: '#ff00a0',
+              backgroundColor: 'rgba(255, 0, 160, 0.15)',
+              borderWidth: 2,
+              borderDash: [5, 3],
+              pointBackgroundColor: '#ff00a0',
+              pointRadius: 3,
+              pointHoverRadius: 5
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: bottomLegend, tooltip: baseTooltip },
+          scales: {
+            r: {
+              angleLines: { color: 'rgba(143, 179, 217, 0.1)' },
+              grid: { color: 'rgba(143, 179, 217, 0.1)' },
+              pointLabels: { color: '#8fb3d9', font: { size: 10 } },
+              ticks: { display: false, backdropColor: 'transparent' },
+              suggestedMin: 0,
+              suggestedMax: 100
+            }
+          }
+        }
+      });
+
+      // ===== 5. Area — 空气质量趋势 =====
+      new Chart(document.getElementById('areaChart'), {
+        type: 'line',
+        data: {
+          labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+          datasets: [{
+            label: 'PM2.5',
+            data: [45, 38, 52, 60, 48, 35, 42],
+            borderColor: '#00d4ff',
+            backgroundColor: 'rgba(0, 212, 255, 0.25)',
+            fill: true,
+            tension: 0.4,
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            pointHoverBackgroundColor: '#00d4ff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: baseTooltip },
+          scales: baseScales
+        }
+      });
+
+      // ===== 6. Doughnut — 交通方式构成 (center text plugin) =====
+      var centerTextPlugin = {
+        id: 'centerText',
+        afterDraw: function (chart) {
+          var data = chart.data.datasets[0].data;
+          var total = 0;
+          for (var i = 0; i < data.length; i++) total += data[i];
+          var ctx = chart.ctx;
+          var area = chart.chartArea;
+          if (!area) return;
+          var x = (area.left + area.right) / 2;
+          var y = (area.top + area.bottom) / 2;
+          ctx.save();
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = '#00d4ff';
+          ctx.font = 'bold 24px "DIN Alternate","Bahnschrift","Impact",sans-serif';
+          ctx.shadowColor = 'rgba(0, 212, 255, 0.6)';
+          ctx.shadowBlur = 8;
+          ctx.fillText(total + '%', x, y - 6);
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = '#8fb3d9';
+          ctx.font = '10px "PingFang SC","Microsoft YaHei",sans-serif';
+          ctx.fillText('出行总占比', x, y + 14);
+          ctx.restore();
+        }
+      };
+      new Chart(document.getElementById('doughnutChart'), {
+        type: 'doughnut',
+        data: {
+          labels: ['私家车', '公交', '地铁', '骑行'],
+          datasets: [{
+            data: [42, 28, 22, 8],
+            backgroundColor: [
+              'rgba(0, 212, 255, 0.82)',
+              'rgba(255, 0, 160, 0.82)',
+              'rgba(123, 60, 255, 0.82)',
+              'rgba(0, 255, 166, 0.82)'
+            ],
+            borderColor: '#0c1a3a',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '62%',
+          plugins: { legend: rightLegend, tooltip: baseTooltip }
+        },
+        plugins: [centerTextPlugin]
+      });
+
+      // ===== 7. Horizontal Bar — 各区事件预警数 =====
+      new Chart(document.getElementById('hbarChart'), {
+        type: 'bar',
+        data: {
+          labels: ['朝阳', '海淀', '丰台', '通州', '顺义', '大兴', '石景山', '门头沟'],
+          datasets: [{
+            label: '预警数',
+            data: [36, 28, 22, 18, 15, 12, 9, 6],
+            backgroundColor: hBarGrad,
+            borderColor: 'rgba(255, 0, 160, 0.6)',
+            borderWidth: 1,
+            borderRadius: 4,
+            barPercentage: 0.7,
+            categoryPercentage: 0.8
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: baseTooltip },
+          scales: baseScales
+        }
+      });
+
+      // ===== 8. PolarArea — 噪声分布 =====
+      new Chart(document.getElementById('polarChart'), {
+        type: 'polarArea',
+        data: {
+          labels: ['凌晨', '早晨', '上午', '下午', '傍晚', '夜间'],
+          datasets: [{
+            data: [35, 48, 62, 58, 52, 40],
+            backgroundColor: [
+              'rgba(0, 212, 255, 0.6)',
+              'rgba(0, 128, 255, 0.6)',
+              'rgba(0, 255, 166, 0.6)',
+              'rgba(255, 204, 0, 0.6)',
+              'rgba(255, 107, 157, 0.6)',
+              'rgba(123, 60, 255, 0.6)'
+            ],
+            borderColor: '#0c1a3a',
+            borderWidth: 1.5
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: rightLegend, tooltip: baseTooltip },
+          scales: {
+            r: {
+              angleLines: { color: 'rgba(143, 179, 217, 0.1)' },
+              grid: { color: 'rgba(143, 179, 217, 0.1)' },
+              ticks: { display: false, backdropColor: 'transparent' }
+            }
+          }
+        }
+      });
+
+      lucide.createIcons();
+    </script>
+</body>
+</html>

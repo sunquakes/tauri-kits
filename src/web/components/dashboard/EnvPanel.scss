@@ -1,0 +1,51 @@
+﻿@use './variables.scss' as *;
+
+/* === Env Panel === */
+.sc-env {
+  /* extends sc-panel */
+}
+
+/* === Noise section === */
+.sc-noise-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sc-noise-gauges {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-md);
+  justify-content: space-around;
+  padding: 4px 0;
+}
+
+.sc-vbar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.sc-vbar {
+  width: 10px;
+  height: 72px;
+  background: rgba(0, 212, 255, 0.08);
+  border: 1px solid var(--sc-border-soft);
+  border-radius: var(--sc-radius-sm);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+.sc-vbar-fill {
+  width: 100%;
+  height: 42%;
+  background: linear-gradient(180deg, var(--sc-magenta) 0%, var(--sc-cyan) 100%);
+  box-shadow: 0 0 6px rgba(0, 212, 255, 0.4);
+}
+
+.sc-vbar-label {
+  font-size: var(--sc-fs-mini);
+  color: var(--sc-text-tertiary);
+}

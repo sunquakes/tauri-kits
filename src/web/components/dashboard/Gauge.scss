@@ -1,0 +1,108 @@
+﻿@use './variables.scss' as *;
+
+/* === Circular gauge === */
+.sc-gauge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.sc-gauge-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+
+  &.magenta {
+    box-shadow: 0 0 12px rgba(255, 0, 160, 0.3);
+  }
+
+  &.cyan {
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.3);
+  }
+
+  &.cyan.small {
+    width: 60px;
+    height: 60px;
+  }
+
+  &.green {
+    box-shadow: 0 0 12px rgba(0, 255, 166, 0.3);
+  }
+
+  &.gold {
+    box-shadow: 0 0 12px rgba(255, 204, 0, 0.3);
+  }
+}
+
+.sc-gauge-center {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--sc-bg-panel-solid);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--sc-border-soft);
+
+  .sc-gauge-circle.small & {
+    width: 46px;
+    height: 46px;
+  }
+}
+
+.sc-gauge-number {
+  font-family: var(--sc-font-digital);
+  font-size: var(--sc-fs-h2);
+  font-weight: var(--sc-fw-bold);
+  line-height: 1;
+}
+
+.sc-gauge-circle.magenta .sc-gauge-number {
+  color: var(--sc-magenta-soft);
+  text-shadow: 0 0 8px rgba(255, 0, 160, 0.5);
+}
+
+.sc-gauge-circle.cyan .sc-gauge-number {
+  color: var(--sc-cyan);
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+}
+
+.sc-gauge-circle.green .sc-gauge-number {
+  color: var(--sc-success);
+  text-shadow: 0 0 8px rgba(0, 255, 166, 0.5);
+}
+
+.sc-gauge-circle.gold .sc-gauge-number {
+  color: var(--sc-gold);
+  text-shadow: 0 0 8px rgba(255, 204, 0, 0.5);
+}
+
+.sc-gauge-unit {
+  font-size: var(--sc-fs-mini);
+  color: var(--sc-text-secondary);
+  font-family: var(--sc-font-sans);
+  margin-top: 1px;
+}
+
+.sc-gauge-text {
+  font-size: var(--sc-fs-h2);
+  font-weight: var(--sc-fw-bold);
+}
+
+.sc-gauge-circle.green .sc-gauge-text {
+  color: var(--sc-success);
+  text-shadow: 0 0 8px rgba(0, 255, 166, 0.5);
+}
+
+.sc-gauge-label {
+  font-size: var(--sc-fs-caption);
+  color: var(--sc-text-secondary);
+  letter-spacing: 1px;
+}

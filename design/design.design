@@ -1,0 +1,41 @@
+{
+  "data": [
+    {
+      "id": "page-dashboard",
+      "title": "城市运行态势监测平台",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1753670400000,
+      "canvasData": {
+        "x": 0,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/dashboard.html",
+        "interactions": []
+      }
+    },
+    {
+      "id": "page-charts",
+      "title": "图表总览",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1753670500000,
+      "canvasData": {
+        "x": 620,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/charts.html",
+        "interactions": []
+      }
+    }
+  ],
+  "config": {
+    "autoLayout": true,
+    "deviceType": "desktop",
+    "projectName": "城市运行态势监测平台"
+  }
+}

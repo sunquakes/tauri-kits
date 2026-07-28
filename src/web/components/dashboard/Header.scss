@@ -1,0 +1,92 @@
+﻿@use './variables.scss' as *;
+
+/* === Header === */
+.sc-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sc-space-md);
+  padding: 4px 0;
+}
+
+.sc-header-deco {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+
+  &.left { justify-content: flex-end; }
+  &.right { justify-content: flex-start; }
+}
+
+.deco-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--sc-cyan));
+  flex: 1;
+  max-width: 180px;
+  opacity: 0.7;
+}
+
+.sc-header-deco.right .deco-line {
+  background: linear-gradient(90deg, var(--sc-cyan), transparent);
+}
+
+.deco-diamond {
+  width: 8px;
+  height: 8px;
+  background: var(--sc-cyan);
+  box-shadow: var(--sc-glow-cyan);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+.deco-bar {
+  width: 3px;
+  height: 20px;
+  background: linear-gradient(180deg, var(--sc-cyan), transparent);
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.sc-header-title-block {
+  text-align: center;
+  padding: 6px 48px;
+  position: relative;
+  background: linear-gradient(180deg, rgba(0, 212, 255, 0.06) 0%, transparent 100%);
+}
+
+.sc-header-corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--sc-cyan);
+  border-style: solid;
+
+  &.tl { top: 0; left: 0; border-width: 2px 0 0 2px; }
+  &.tr { top: 0; right: 0; border-width: 2px 2px 0 0; }
+  &.bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+  &.br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+}
+
+.sc-header-title {
+  font-size: clamp(24px, 2.6vw, var(--sc-fs-display));
+  font-weight: var(--sc-fw-bold);
+  font-family: var(--sc-font-sans);
+  background: linear-gradient(180deg, var(--sc-text-primary) 0%, var(--sc-cyan) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 6px;
+  margin: 0;
+  line-height: var(--sc-lh-tight);
+  text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+  white-space: nowrap;
+}
+
+.sc-header-subtitle {
+  font-size: var(--sc-fs-caption);
+  color: var(--sc-text-secondary);
+  margin: 2px 0 0 0;
+  letter-spacing: 4px;
+  white-space: nowrap;
+}

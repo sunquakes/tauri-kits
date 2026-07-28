@@ -78,6 +78,7 @@ pub async fn api_user_login(
 pub async fn api_user_list(
     page: i64,
     page_size: i64,
+    r#where: Option<Vec<Vec<String>>>,
     app_handle: AppHandle,
 ) -> ApiResponse<PageResponse<User>> {
     let pool = match get_db_pool(&app_handle).await {
@@ -85,7 +86,9 @@ pub async fn api_user_list(
         Err(e) => return ApiResponse::server_error(&e),
     };
 
-    match db_page_records(&pool, USER_TABLE, USER_COLS, "id DESC", page, page_size).await {
+    let where_conditions = r#where.unwrap_or_default();
+
+    match db_page_records(&pool, USER_TABLE, USER_COLS, "id DESC", page, page_size, &where_conditions).await {
         Ok((rows, total)) => {
             let records = rows.into_iter().map(map_user).collect();
             ApiResponse::success(PageResponse { current: page, page_size, total, records })

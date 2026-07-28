@@ -1,0 +1,354 @@
+{
+  "skillProvenance": {
+    "name": "solo-design",
+    "version": "2026.07.06.8",
+    "version_source": "skill-version.json",
+    "runtime_skill_dir": "c:\\Users\\Administrator\\.trae-cn\\builtin\\design\\default\\skills\\solo-design",
+    "recorded_at": "2026-07-28T00:00:00+08:00"
+  },
+  "project": {
+    "name": "城市运行态势监测平台",
+    "path": "e:\\ruixinglong\\tauri-kits\\design",
+    "operation": "create",
+    "deviceType": "desktop",
+    "language": "zh-CN",
+    "dashboardMode": true,
+    "intentProfile": {
+      "caseFamily": "restore_1to1",
+      "graphicStrategy": null,
+      "sourceType": "image",
+      "routingReason": "用户上传智慧城市监测大屏参考图并要求按该设计制作大屏"
+    },
+    "replicationMode": "high-fidelity",
+    "sourceUrl": null,
+    "contextReadBudget": {
+      "workflowFileReadLimit": 1,
+      "largeWorkflowFilesCachedInSummary": [],
+      "restoreInputsCached": [
+        "referenceCaptureEvidence",
+        "visualSpecExcerpt",
+        "restorationContractLite",
+        "restoreVisualCheckpoints"
+      ],
+      "subAgentReadsFullSummary": false
+    },
+    "readBudgetLedger": [
+      {
+        "file": "workflows/create-project-restore-1to1.md",
+        "readCount": 1,
+        "limit": 1,
+        "reason": "initial route-locked workflow read",
+        "exceeded": false
+      }
+    ],
+    "dispatchPreflightManifest": [],
+    "cssPreflightEvidence": {
+      "applies": false,
+      "status": "not-needed",
+      "brandPrefix": "sc",
+      "checks": {
+        "themeVars": "not-needed",
+        "semanticTokenFallback": "not-needed",
+        "themeInline": "not-needed",
+        "tailwindCdn": "not-needed",
+        "htmlClass": "not-needed"
+      }
+    },
+    "repairEntryEvidence": [
+      {
+        "repairPolicyRead": true,
+        "renderBlockingErrorPresent": true,
+        "softWarningOnly": false,
+        "ownerClassified": true,
+        "postValidationMutationDetected": false,
+        "validationErrorClasses": ["directory-structure:missing-assets", "app-shell-viewport:missing-data-scroll-region", "app-shell-viewport:natural-document-flow"],
+        "repairBudget": {
+          "validationRunsSoFar": 1,
+          "maxValidationRuns": 3
+        },
+        "recorded_at": "2026-07-28T00:00:00+08:00"
+      }
+    ],
+    "finishReadinessEvidence": {
+      "validationReportSuccess": true,
+      "postValidationMutationDetected": false,
+      "pageSummaryTablePrepared": true,
+      "manualArtifactLinksIncluded": false,
+      "restoreEvidenceReviewPassed": true,
+      "deviceTypeConsistency": {
+        "summaryDeviceType": "desktop",
+        "designDeviceType": "desktop",
+        "status": "matched"
+      },
+      "mobileBackgroundCoverage": {
+        "status": "not-applicable",
+        "unresolvedBodyVars": []
+      }
+    },
+    "referenceCaptureEvidence": {
+      "sourceType": "image",
+      "sourceAuthority": "screenshot",
+      "providedImagePath": "c:\\Users\\Administrator\\.trae-cn\\attachments\\6a681ca6fb17df5c8a444e52\\18520b96-72b2-476a-8ac9-8eec9062c71c_a711b79e-8228-480e-863d-30f7a5d91754_image.png",
+      "fullPageScreenshotEvidence": null,
+      "viewportScreenshotEvidence": null,
+      "browserSnapshotSections": [],
+      "webFetchStatus": "not-needed",
+      "visualSpecExcerptLength": 1800,
+      "captureBlockingReason": null
+    },
+    "visualSpecExcerpt": "Deep navy/black background large-screen dashboard. Top center: angular tech header with main title '城市运行态势监测平台' and subtitle '交通 · 环境 · 能耗 · 安全', flanked by metallic angular decorative borders. Three-column body: left panel traffic metrics (circular cyan car icon, '交通流量 92.6万次', magenta circular gauge '1.28' congestion index, '46km/h' avg speed, 24h area chart), center 3D holographic cityscape with glowing skyscrapers and magenta/cyan traffic arteries encircling, right panel environmental metrics ('空气质量 优' badge, 'PM2.5 28μg/m³', vertical bar + circular gauge '42dB' noise, 24h noise area chart). Bottom row: four hexagonal-icon indicator cards — '能耗 1,280吨标煤', '事件预警 36起', '摄像头在线 98.2%', '工单处理 96.7%'. Color palette: electric blue #00d4ff, magenta #ff00a0/#ff6b9d, cyan accents on near-black #050b1a. HUD/cyberpunk aesthetic with glows, hexagons, grid patterns, particle effects.",
+    "restoreVisualCheckpoints": [
+      {
+        "id": "vc-01",
+        "priority": "high",
+        "sourceObservation": "Full-screen fixed dark navy/black background (#050b1a) filling the entire dashboard viewport with no scroll, a true large-screen data layout.",
+        "targetImplementation": "Set body and root containers to background #050b1a, fixed full-viewport (100vw/100vh) dashboard shell with overflow hidden, internal sections fill the viewport.",
+        "tolerance": "none",
+        "region": "header"
+      },
+      {
+        "id": "vc-02",
+        "priority": "high",
+        "sourceObservation": "Top center angular tech header with main title '城市运行态势监测平台' in large bright text and subtitle '交通 · 环境 · 能耗 · 安全' below it, flanked by metallic angular decorative corner brackets.",
+        "targetImplementation": "Header bar with CSS clip-path/angular borders, large title (var(--sc-fs-display)) in cyan-to-white gradient text, subtitle in secondary text color with dot separators, decorative angled border elements on both sides using borders/clip-path.",
+        "tolerance": "small spacing variance",
+        "region": "header"
+      },
+      {
+        "id": "vc-03",
+        "priority": "high",
+        "sourceObservation": "Three-column body: left traffic panel, center 3D city visualization, right environment panel. Panels are translucent dark cards with cyan glowing borders and corner accents.",
+        "targetImplementation": "CSS grid with three columns (left ~24%, center ~52%, right ~24%); each panel uses var(--sc-bg-panel) background, var(--sc-border-cyan) border, subtle glow, and decorative corner brackets via pseudo-elements.",
+        "tolerance": "small spacing variance",
+        "region": "card"
+      },
+      {
+        "id": "vc-04",
+        "priority": "high",
+        "sourceObservation": "Left panel: circular cyan-ringed car icon, '交通流量 92.6万次' large digital number in cyan, magenta circular gauge showing '1.28' with '拥堵指数' label, '46km/h' avg speed, and a 24-hour area/line chart of speed fluctuations.",
+        "targetImplementation": "Panel header with circular icon badge (cyan ring), big digital metric value using var(--sc-font-digital) in cyan, a CSS conic-gradient circular gauge with magenta fill and center value '1.28', secondary '46km/h' stat, and a Chart.js area chart (cyan translucent fill) with 00:00-24:00 axis.",
+        "tolerance": "approximate icon acceptable",
+        "region": "card"
+      },
+      {
+        "id": "vc-05",
+        "priority": "high",
+        "sourceObservation": "Center: glowing holographic 3D cityscape with translucent blue skyscrapers of varying heights, tallest in middle, encircled by sweeping magenta/purple/cyan traffic light arteries, small hexagonal monitoring markers floating above.",
+        "targetImplementation": "CSS/SVG composition: a central circular stage with radial gradient glow, a skyline built from stacked translucent blue rectangles with window dots, sweeping curved traffic arteries as SVG paths with magenta/cyan gradient strokes and blur glow, a few hexagonal marker badges positioned above buildings. Use transform perspective for depth.",
+        "tolerance": "approximate icon acceptable",
+        "region": "hero"
+      },
+      {
+        "id": "vc-06",
+        "priority": "high",
+        "sourceObservation": "Right panel: circular '优' (Excellent) green badge for air quality with '空气质量 优' and 'PM2.5 28μg/m³'; noise section with vertical bar gauge + circular gauge showing '42dB' and a 24-hour noise area chart.",
+        "targetImplementation": "Air quality circular badge with green (#00ffa6) ring and '优' center text, metric labels; noise block with a vertical gradient bar gauge, a conic-gradient circular gauge center '42dB', and a Chart.js area chart (magenta/cyan tint) for 24h noise trend.",
+        "tolerance": "approximate icon acceptable",
+        "region": "card"
+      },
+      {
+        "id": "vc-07",
+        "priority": "high",
+        "sourceObservation": "Bottom row: four rectangular indicator cards with hexagonal icons — 能耗 1,280吨标煤 (building icon), 事件预警 36起 (shield+check), 摄像头在线 98.2% (gear), 工单处理 96.7% (document).",
+        "targetImplementation": "Four-column grid of cards with hexagon-shaped icon badges (clip-path polygon), large digital values in var(--sc-font-digital), unit labels, subtle cyan border and glow. Icons rendered as inline SVG or CSS shapes.",
+        "tolerance": "approximate icon acceptable",
+        "region": "card"
+      },
+      {
+        "id": "vc-08",
+        "priority": "medium",
+        "sourceObservation": "Consistent HUD aesthetic: cyan glowing borders, corner brackets, grid/particle background texture, hexagonal motifs, and digital-style numeric typography throughout.",
+        "targetImplementation": "Apply var(--sc-glow-cyan) to borders/key elements, add corner bracket pseudo-elements on panels, faint CSS grid background pattern on root, use var(--sc-font-digital) for all large numbers.",
+        "tolerance": "small spacing variance",
+        "region": "card"
+      },
+      {
+        "id": "vc-09",
+        "priority": "medium",
+        "sourceObservation": "Color rhythm: cyan as primary accent for neutral/positive data, magenta/pink for congestion/warning emphasis, green for excellent status, deep blue for structure.",
+        "targetImplementation": "Use --sc-cyan for primary metrics/borders, --sc-magenta for congestion/warning values, --sc-success for air quality excellent, --sc-text-secondary for labels, maintain consistent color semantics across all panels.",
+        "tolerance": "none",
+        "region": "card"
+      },
+      {
+        "id": "vc-10",
+        "priority": "medium",
+        "sourceObservation": "Numeric values use a distinct digital/techno font, large and glowing, contrasting with smaller sans-serif Chinese labels.",
+        "targetImplementation": "All key metric numbers use var(--sc-font-digital) at --sc-fs-h1 or larger with text-shadow glow; Chinese labels use var(--sc-font-sans) at --sc-fs-body/caption in --sc-text-secondary.",
+        "tolerance": "small spacing variance",
+        "region": "card"
+      }
+    ],
+    "restorationContractLite": {
+      "sourceAuthority": "screenshot",
+      "targetViewport": "desktop",
+      "similarityFreeze": [
+        "Deep navy/black background with cyan/magenta HUD aesthetic",
+        "Top angular tech header with main title + subtitle",
+        "Three-column layout: traffic left, 3D city center, environment right",
+        "Bottom four hexagonal-icon indicator cards",
+        "Digital-font large glowing numeric values"
+      ],
+      "contentToPreserve": [
+        "城市运行态势监测平台",
+        "交通 · 环境 · 能耗 · 安全",
+        "交通流量 92.6万次",
+        "拥堵指数 1.28",
+        "46km/h",
+        "空气质量 优",
+        "PM2.5 28μg/m³",
+        "42dB",
+        "能耗 1,280吨标煤",
+        "事件预警 36起",
+        "摄像头在线 98.2%",
+        "工单处理 96.7%"
+      ],
+      "sourceRegionCoverage": [
+        { "region": "header title block", "coverage": "mapped", "checkpoint": "vc-02" },
+        { "region": "left traffic panel", "coverage": "mapped", "checkpoint": "vc-04" },
+        { "region": "center 3D city", "coverage": "mapped", "checkpoint": "vc-05" },
+        { "region": "right environment panel", "coverage": "mapped", "checkpoint": "vc-06" },
+        { "region": "bottom indicator cards", "coverage": "mapped", "checkpoint": "vc-07" },
+        { "region": "background & HUD texture", "coverage": "mapped", "checkpoint": "vc-01, vc-08" }
+      ],
+      "allowedDeviationBudget": [
+        "3D cityscape approximated via CSS/SVG stacking instead of real WebGL",
+        "Traffic arteries approximated via SVG curved paths with gradient + blur glow",
+        "Particle/particle-effects approximated via CSS radial gradients and subtle animations"
+      ]
+    },
+    "restoreEvidenceReview": {
+      "applies": true,
+      "reviewedPages": ["page-dashboard"],
+      "highPriorityCheckpointCount": 7,
+      "highPriorityMatchedCount": 7,
+      "highPriorityMissingCount": 0,
+      "highPriorityPartialWithoutDeviationCount": 0,
+      "allHighPriorityCheckpointsAcceptable": true,
+      "screenshotAuditUsed": false,
+      "screenshotAuditReason": null,
+      "blockingReason": null
+    },
+    "styleDefinitionBrief": null,
+    "designRead": "城市级指挥大屏 / 领导驾驶舱 / 高密度信息展示 / 科技感HUD视觉 / 长时间观看需克制装饰",
+    "designDials": {
+      "layoutVariance": 2,
+      "motionIntensity": 2,
+      "visualDensity": 5
+    },
+    "styleContinuityAnchors": null,
+    "specsConstraints": null,
+    "sharedProjectShellContract": null,
+    "generationTree": null
+  },
+  "designSource": {
+    "operatingMode": "free-explore",
+    "libraryIdentity": {
+      "name": null,
+      "id": null,
+      "version": null,
+      "scope": null,
+      "path": null,
+      "versionSource": null
+    },
+    "libraryPath": null,
+    "cssFilePath": "e:\\ruixinglong\\tauri-kits\\design\\colors_and_type.css",
+    "brandPrefix": "sc",
+    "themeMode": "dark",
+    "designDecisionSummary": "从参考截图还原智慧城市监测大屏：深蓝黑底 + 青/品红HUD配色，三栏布局 + 底部指标卡，数字字体 + 发光边框，3D城市用CSS/SVG近似。",
+    "componentContractKind": "undefined",
+    "forbiddenInventedComponents": [],
+    "allowedComponents": [],
+    "styleConstraints": {
+      "radiusMax": 12,
+      "spacingBase": 4,
+      "fontSizeBody": 14,
+      "fontSizeMin": 10,
+      "controlHeightDefault": 32,
+      "controlHeightLarge": 40
+    },
+    "productContext": {
+      "kitType": "smart-city-dashboard",
+      "productType": "Large-screen situational-awareness data screen"
+    },
+    "actualTokenNameReference": [
+      { "semanticPurpose": "Background base", "tokenName": "--sc-bg-primary" },
+      { "semanticPurpose": "Panel surface", "tokenName": "--sc-bg-panel" },
+      { "semanticPurpose": "Primary cyan accent", "tokenName": "--sc-cyan" },
+      { "semanticPurpose": "Magenta warning accent", "tokenName": "--sc-magenta" },
+      { "semanticPurpose": "Success green", "tokenName": "--sc-success" },
+      { "semanticPurpose": "Primary text", "tokenName": "--sc-text-primary" },
+      { "semanticPurpose": "Secondary text", "tokenName": "--sc-text-secondary" },
+      { "semanticPurpose": "Digital numeric font", "tokenName": "--sc-font-digital" },
+      { "semanticPurpose": "Cyan border glow", "tokenName": "--sc-glow-cyan" }
+    ]
+  },
+  "pages": [
+    {
+      "nodeId": "page-dashboard",
+      "slug": "dashboard",
+      "title": "城市运行态势监测平台",
+      "htmlSrc": "pages/dashboard.html",
+      "pageIndex": 1,
+      "stateGroupId": null,
+      "stateRole": null,
+      "baseStatePageId": null,
+      "sharedShellContract": [],
+      "mutableRegions": [],
+      "derivedFromHtmlSrc": null,
+      "derivationType": "original",
+      "sourcePageId": null,
+      "sourceHtmlSrc": null,
+      "pageType": "information-dense",
+      "viewportMode": "app-shell",
+      "businessScenario": "智慧城市运行态势监测大屏，展示交通、环境、能耗、安全四大维度指标",
+      "visualNorthStar": "深空黑底上的科技感城市指挥大屏，中央3D城市数字孪生为核心视觉，两侧数据面板与底部指标卡呈对称包围结构",
+      "compositionPattern": "三栏包围式：顶部标题栏 + 左交通/中城市/右环境 + 底部四指标卡",
+      "continuityAnchors": ["青色发光边框", "数字字体大数值", "六边形图标母题", "深蓝黑底色"],
+      "libraryRestraintMode": false,
+      "uiKitPath": null,
+      "componentPlan": [],
+      "imagePlan": [],
+      "chartsRequired": true,
+      "miniProgramStyle": false,
+      "qualityRisks": ["大屏固定视口布局需精确控制尺寸", "3D城市用CSS近似易显廉价", "高密度信息需保持留白节奏"],
+      "restoreEvidence": {
+        "visualCheckpointResults": [
+          { "id": "vc-01", "priority": "high", "result": "matched", "note": "body 与 .sc-shell 背景 #050b1a，100vw/100vh 固定 overflow hidden" },
+          { "id": "vc-02", "priority": "high", "result": "matched", "note": "顶部标题栏四角L形装饰 + 两侧菱形/渐变线/竖条棱角装饰，主标题青白渐变发光" },
+          { "id": "vc-03", "priority": "high", "result": "matched", "note": "grid 24%/1fr/24% 三列，面板渐变背景 + 青色边框 + 角标伪元素" },
+          { "id": "vc-04", "priority": "high", "result": "matched", "note": "圆形青环图标 + 92.6万次大数字 + conic-gradient 品红仪表1.28 + 46km/h + Chart.js青色面积图" },
+          { "id": "vc-05", "priority": "high", "result": "matched", "note": "CSS 3D 城市由8个堆叠蓝色长方体 + SVG弧形交通光带 + 六边形标记，径向发光底座 + 雷达扫描" },
+          { "id": "vc-06", "priority": "high", "result": "matched", "note": "绿色圆形优徽章 + PM2.5 + 竖条仪表 + 青色圆形42dB仪表 + Chart.js品红噪声面积图" },
+          { "id": "vc-07", "priority": "high", "result": "matched", "note": "四列六边形图标卡，Lucide图标 zap/shield/video/clipboard，大数字发光" },
+          { "id": "vc-08", "priority": "medium", "result": "matched", "note": "CSS网格背景纹理 + 径向光斑 + 全面板角标 + 六边形母题" },
+          { "id": "vc-09", "priority": "medium", "result": "matched", "note": "青色主强调/品红警示/绿色优/次要标签语义一致" },
+          { "id": "vc-10", "priority": "medium", "result": "matched", "note": "数字 var(--sc-font-digital) 发光，中文标签 var(--sc-font-sans) 次要色" }
+        ],
+        "sourceRegionCoverageResults": [
+          { "region": "header title block", "coverage": "mapped" },
+          { "region": "left traffic panel", "coverage": "mapped" },
+          { "region": "center 3D city", "coverage": "mapped" },
+          { "region": "right environment panel", "coverage": "mapped" },
+          { "region": "bottom indicator cards", "coverage": "mapped" },
+          { "region": "background & HUD texture", "coverage": "mapped" }
+        ],
+        "dominantReferenceImageUsedAsBody": false,
+        "componentRebuildEvidence": [
+          "3D城市: CSS transform perspective + 堆叠半透明蓝色div + 窗格点伪元素 + 径向发光底座 + conic-gradient雷达扫描",
+          "交通光带: SVG path 二次贝塞尔弧线 × 3 + linearGradient品红/紫/青 + drop-shadow发光 + stroke-dasharray流光动画",
+          "六边形监测标记: clip-path polygon + 浮动keyframe",
+          "圆形仪表: CSS conic-gradient (拥堵指数品红45%/噪声青色40%/空气优绿色90%)",
+          "速度/噪声面积图: Chart.js line fill:true 青色/品红半透明填充",
+          "顶部标题栏: 四角L形伪元素 + 菱形/渐变线/竖条金属棱角装饰 + 渐变发光标题",
+          "背景纹理: linear-gradient 40px网格 + 三处径向渐变光斑",
+          "角标: 面板/卡片 ::before/::after 青色L形角标"
+        ]
+      }
+    }
+  ],
+  "assets": [],
+  "wiringPlan": [],
+  "hiddenInteractionPlan": []
+}
+
