@@ -1,21 +1,24 @@
 import { ThunderboltOutlined, WarningOutlined, VideoCameraOutlined, FileTextOutlined, HomeOutlined, BarChartOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import Header from './Header'
 import TrafficPanel from './TrafficPanel'
 import CityPanel from './CityPanel'
 import EnvPanel from './EnvPanel'
 import IndicatorCard from './IndicatorCard'
+import ThemeToggle from './ThemeToggle'
 import './Dashboard.scss'
 
 export default function Dashboard() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   const handleBackToAdmin = () => {
-    window.location.href = window.location.origin + '/'
+    window.location.href = window.location.origin + '/dashboard'
   }
 
   const handleGoToCharts = () => {
-    window.location.href = window.location.origin + '/charts'
+    navigate('/charts')
   }
 
   return (
@@ -30,6 +33,8 @@ export default function Dashboard() {
         <BarChartOutlined style={{ fontSize: 16 }} />
         <span>{t('dashboard.charts_overview')}</span>
       </button>
+      {/* Theme Toggle */}
+      <ThemeToggle />
 
       {/* Header */}
       <Header />

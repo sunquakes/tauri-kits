@@ -1,14 +1,10 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createHashRouter } from 'react-router-dom'
 import Dashboard from '../components/dashboard/Dashboard'
 import ChartsOverview from '../components/chart/ChartsOverview'
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
-    element: <Dashboard />
-  },
-  {
-    path: '/web.html',
     element: <Dashboard />
   },
   {

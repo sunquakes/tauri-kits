@@ -52,7 +52,7 @@
   text-align: center;
   padding: 6px 48px;
   position: relative;
-  background: linear-gradient(180deg, rgba(0, 212, 255, 0.06) 0%, transparent 100%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--sc-cyan) 6%, transparent) 0%, transparent 100%);
 }
 
 .sc-header-corner {
@@ -79,7 +79,7 @@
   letter-spacing: 6px;
   margin: 0;
   line-height: var(--sc-lh-tight);
-  text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+  text-shadow: 0 0 30px color-mix(in srgb, var(--sc-cyan) 30%, transparent);
   white-space: nowrap;
 }
 

@@ -5,6 +5,7 @@ import router from './router'
 import './lang'
 import 'antd/dist/reset.css'
 import '../style.css'
+import './themes.scss'
 
 function AppContent() {
   return (

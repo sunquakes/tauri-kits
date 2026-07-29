@@ -17,8 +17,29 @@ interface StoreContextType {
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined)
 
+const STORAGE_KEY = 'admin-user'
+
 export function StoreProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUserState] = useState<User | null>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (saved) {
+      try {
+        return JSON.parse(saved) as User
+      } catch {
+        return null
+      }
+    }
+    return null
+  })
+
+  const setUser = (user: User | null) => {
+    setUserState(user)
+    if (user) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user))
+    } else {
+      localStorage.removeItem(STORAGE_KEY)
+    }
+  }
 
   return (
     <StoreContext.Provider value={{ user, setUser }}>

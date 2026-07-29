@@ -10,7 +10,7 @@
   border: 1px solid var(--sc-border-cyan);
   border-radius: var(--sc-radius-md);
   position: relative;
-  box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.04);
+  box-shadow: inset 0 0 20px color-mix(in srgb, var(--sc-cyan) 4%, transparent);
   box-sizing: border-box;
 
   &::before,
@@ -41,26 +41,26 @@
   width: 44px;
   height: 44px;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  background: linear-gradient(135deg, rgba(0, 212, 255, 0.25), rgba(0, 128, 255, 0.1));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--sc-cyan) 25%, transparent), color-mix(in srgb, var(--sc-blue) 10%, transparent));
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.4));
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--sc-cyan) 40%, transparent));
 
   &.magenta {
-    background: linear-gradient(135deg, rgba(255, 0, 160, 0.25), rgba(123, 60, 255, 0.1));
-    filter: drop-shadow(0 0 5px rgba(255, 0, 160, 0.4));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--sc-magenta) 25%, transparent), color-mix(in srgb, var(--sc-purple) 10%, transparent));
+    filter: drop-shadow(0 0 5px color-mix(in srgb, var(--sc-magenta) 40%, transparent));
   }
 
   &.gold {
-    background: linear-gradient(135deg, rgba(255, 204, 0, 0.25), rgba(255, 153, 0, 0.1));
-    filter: drop-shadow(0 0 5px rgba(255, 204, 0, 0.4));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--sc-gold) 25%, transparent), color-mix(in srgb, var(--sc-warning) 10%, transparent));
+    filter: drop-shadow(0 0 5px color-mix(in srgb, var(--sc-gold) 40%, transparent));
   }
 
   &.green {
-    background: linear-gradient(135deg, rgba(0, 255, 166, 0.25), rgba(0, 176, 120, 0.1));
-    filter: drop-shadow(0 0 5px rgba(0, 255, 166, 0.4));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--sc-success) 25%, transparent), color-mix(in srgb, var(--sc-cyan) 10%, transparent));
+    filter: drop-shadow(0 0 5px color-mix(in srgb, var(--sc-success) 40%, transparent));
   }
 }
 
@@ -75,23 +75,23 @@
   font-size: var(--sc-fs-h1);
   font-weight: var(--sc-fw-bold);
   color: var(--sc-cyan);
-  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+  text-shadow: 0 0 10px color-mix(in srgb, var(--sc-cyan) 50%, transparent);
   line-height: var(--sc-lh-tight);
   white-space: nowrap;
 
   &.magenta {
     color: var(--sc-magenta-soft);
-    text-shadow: 0 0 10px rgba(255, 0, 160, 0.5);
+    text-shadow: 0 0 10px color-mix(in srgb, var(--sc-magenta) 50%, transparent);
   }
 
   &.gold {
     color: var(--sc-gold);
-    text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+    text-shadow: 0 0 10px color-mix(in srgb, var(--sc-gold) 50%, transparent);
   }
 
   &.green {
     color: var(--sc-success);
-    text-shadow: 0 0 10px rgba(0, 255, 166, 0.5);
+    text-shadow: 0 0 10px color-mix(in srgb, var(--sc-success) 50%, transparent);
   }
 }
 

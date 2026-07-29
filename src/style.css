@@ -8,6 +8,8 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
+  background: var(--sc-bg-primary, #060d1f);
+  transition: background 0.4s ease;
 }
 
 code {

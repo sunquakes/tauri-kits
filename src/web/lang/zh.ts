@@ -34,7 +34,16 @@ export default {
     unit_incidents: '起',
     camera_online: '摄像头在线',
     work_order_processing: '工单处理',
-    charts_overview: '图表总览'
+    charts_overview: '图表总览',
+    back_to_dashboard: '返回大屏'
+  },
+  theme: {
+    switch: '切换主题',
+    tech: '科技深蓝',
+    eco: '安全青绿',
+    alert: '警示赤红',
+    vital: '活力橙黄',
+    future: '未来紫蓝'
   },
   charts: {
     energy_comparison: '区域能耗对比',

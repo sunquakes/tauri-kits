@@ -34,7 +34,16 @@ export default {
     unit_incidents: 'cases',
     camera_online: 'Camera Online',
     work_order_processing: 'Work Order Processing',
-    charts_overview: 'Charts Overview'
+    charts_overview: 'Charts Overview',
+    back_to_dashboard: 'Back to Dashboard'
+  },
+  theme: {
+    switch: 'Switch Theme',
+    tech: 'Tech Blue',
+    eco: 'Eco Green',
+    alert: 'Alert Red',
+    vital: 'Vital Orange',
+    future: 'Future Purple'
   },
   charts: {
     energy_comparison: 'Regional Energy Comparison',

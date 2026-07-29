@@ -26,8 +26,8 @@
   bottom: 10%;
   left: 15%;
   background: radial-gradient(ellipse at center bottom,
-    rgba(0, 128, 255, 0.3) 0%,
-    rgba(0, 212, 255, 0.12) 30%,
+    color-mix(in srgb, var(--sc-blue) 30%, transparent) 0%,
+    color-mix(in srgb, var(--sc-cyan) 12%, transparent) 30%,
     transparent 70%);
   border-radius: 50%;
   filter: blur(15px);
@@ -48,8 +48,8 @@
   border-radius: 50%;
   border: 1px solid var(--sc-border-soft);
   box-shadow:
-    0 0 0 15px rgba(0, 212, 255, 0.03),
-    0 0 0 30px rgba(0, 212, 255, 0.02);
+    0 0 0 15px color-mix(in srgb, var(--sc-cyan) 3%, transparent),
+    0 0 0 30px color-mix(in srgb, var(--sc-cyan) 2%, transparent);
   pointer-events: none;
 }
 
@@ -60,7 +60,7 @@
   bottom: 10%;
   left: 15%;
   border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0deg, rgba(0, 212, 255, 0.12) 30deg, transparent 60deg);
+  background: conic-gradient(from 0deg, transparent 0deg, color-mix(in srgb, var(--sc-cyan) 12%, transparent) 30deg, transparent 60deg);
   animation: radar-scan 4s linear infinite;
   pointer-events: none;
 }
@@ -81,22 +81,22 @@
 
 .sc-building {
   background: linear-gradient(180deg,
-    rgba(0, 212, 255, 0.35) 0%,
-    rgba(0, 128, 255, 0.18) 50%,
-    rgba(0, 72, 176, 0.1) 100%);
-  border: 1px solid rgba(0, 212, 255, 0.4);
+    color-mix(in srgb, var(--sc-cyan) 35%, transparent) 0%,
+    color-mix(in srgb, var(--sc-blue) 18%, transparent) 50%,
+    color-mix(in srgb, var(--sc-blue-deep) 10%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--sc-cyan) 40%, transparent);
   border-bottom: none;
   position: relative;
   box-shadow:
-    0 0 8px rgba(0, 212, 255, 0.2),
-    inset 0 0 8px rgba(0, 128, 255, 0.1);
+    0 0 8px color-mix(in srgb, var(--sc-cyan) 20%, transparent),
+    inset 0 0 8px color-mix(in srgb, var(--sc-blue) 10%, transparent);
   flex-shrink: 0;
 
   &::before {
     content: '';
     position: absolute;
     inset: 3px;
-    background-image: radial-gradient(circle, rgba(0, 212, 255, 0.5) 1px, transparent 1px);
+    background-image: radial-gradient(circle, color-mix(in srgb, var(--sc-cyan) 50%, transparent) 1px, transparent 1px);
     background-size: 5px 7px;
     opacity: 0.5;
   }
@@ -123,7 +123,7 @@
 }
 
 .sc-artery-path {
-  filter: drop-shadow(0 0 3px rgba(255, 0, 160, 0.5));
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--sc-magenta) 50%, transparent));
   stroke-dasharray: 8 5;
   animation: artery-flow 2s linear infinite;
 }
@@ -137,13 +137,13 @@
   width: 26px;
   height: 26px;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  background: rgba(0, 212, 255, 0.15);
+  background: color-mix(in srgb, var(--sc-cyan) 15%, transparent);
   border: 1px solid var(--sc-cyan);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 3;
-  box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--sc-cyan) 40%, transparent);
   animation: hex-float 3s ease-in-out infinite;
 
   &.m1 { top: 20%; left: 32%; }

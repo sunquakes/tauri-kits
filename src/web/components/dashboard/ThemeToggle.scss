@@ -1,0 +1,97 @@
+.sc-theme-wrap {
+  position: absolute;
+  top: 10px;
+  right: 120px;
+  z-index: 50;
+}
+
+.sc-theme-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-family: var(--sc-font-sans);
+  font-size: var(--sc-fs-caption);
+  font-weight: var(--sc-fw-semibold);
+  color: var(--sc-text-secondary);
+  letter-spacing: 0.5px;
+  background: color-mix(in srgb, var(--sc-text-secondary) 6%, transparent);
+  border: 1px solid var(--sc-border-soft);
+  border-radius: var(--sc-radius-sm);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--sc-text-primary);
+    background: color-mix(in srgb, var(--sc-text-secondary) 12%, transparent);
+    border-color: var(--sc-cyan);
+    box-shadow: var(--sc-glow-cyan);
+  }
+}
+
+.sc-theme-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px currentColor;
+  transition: background 0.3s ease;
+}
+
+/* === Picker panel === */
+.sc-theme-picker {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--sc-bg-panel-solid);
+  border: 1px solid var(--sc-border-cyan);
+  border-radius: var(--sc-radius-pill);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), inset 0 0 20px color-mix(in srgb, var(--sc-cyan) 4%, transparent);
+  opacity: 0;
+  transform: scaleX(0.8) translateY(-8px);
+  transform-origin: top right;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+
+  &.open {
+    opacity: 1;
+    transform: scaleX(1) translateY(0);
+    pointer-events: auto;
+  }
+}
+
+.sc-theme-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sc-theme-option-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--opt-color);
+  box-shadow: 0 0 8px var(--opt-color);
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.sc-theme-option:hover .sc-theme-option-dot {
+  transform: scale(1.15);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.sc-theme-option.active .sc-theme-option-dot {
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 12px var(--opt-color);
+}

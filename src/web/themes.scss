@@ -1,0 +1,191 @@
+/**
+ * Smart City Dashboard — 5 Industry Theme Definitions
+ *
+ * Default theme (deep blue / 科技深蓝) is defined in variables.scss via :root.
+ * Additional themes override CSS custom properties via :root[data-theme="..."].
+ * Each theme follows a cohesive palette: background → panel → accent → complement.
+ */
+
+/* ===== Theme 2: Eco Green (安全青绿) ===== */
+/* Deep forest background, teal accent, amber complement */
+:root[data-theme='eco'] {
+  --sc-bg-primary: #061a14;
+  --sc-bg-secondary: #0d2e22;
+  --sc-bg-panel: rgba(13, 46, 34, 0.55);
+  --sc-bg-panel-solid: #0a2418;
+  --sc-bg-overlay: rgba(6, 26, 20, 0.85);
+
+  --sc-cyan: #00d4a0;
+  --sc-cyan-soft: #2eecc3;
+  --sc-blue: #1a7a5a;
+  --sc-blue-deep: #0f553f;
+  --sc-magenta: #ffb347;
+  --sc-magenta-soft: #ffcc7a;
+  --sc-purple: #26d0a8;
+  --sc-gold: #e6a817;
+
+  --sc-success: #00ff95;
+  --sc-warning: #ffb347;
+  --sc-danger: #ff5e5e;
+  --sc-info: #00d4a0;
+
+  --sc-text-primary: #e8fff5;
+  --sc-text-secondary: #88d4b0;
+  --sc-text-tertiary: #4a8a70;
+  --sc-text-accent: #00d4a0;
+  --sc-text-magenta: #ffb347;
+
+  --sc-border-cyan: rgba(0, 212, 160, 0.35);
+  --sc-border-soft: rgba(0, 212, 160, 0.15);
+  --sc-divider: rgba(136, 212, 176, 0.12);
+
+  --sc-glow-cyan: 0 0 12px rgba(0, 212, 160, 0.6);
+  --sc-glow-magenta: 0 0 12px rgba(255, 179, 71, 0.55);
+  --sc-glow-blue: 0 0 16px rgba(26, 122, 90, 0.5);
+
+  --sc-glow-bg-1: rgba(0, 212, 160, 0.1);
+  --sc-glow-bg-2: rgba(255, 179, 71, 0.08);
+  --sc-glow-bg-3: rgba(38, 208, 168, 0.05);
+
+  --sc-gradient-cyan-magenta: linear-gradient(90deg, #00d4a0 0%, #26d0a8 50%, #ffb347 100%);
+  --sc-gradient-panel: linear-gradient(180deg, rgba(0, 212, 160, 0.08) 0%, rgba(13, 46, 34, 0.6) 100%);
+  --sc-gradient-header: linear-gradient(90deg, transparent 0%, rgba(0, 212, 160, 0.25) 50%, transparent 100%);
+}
+
+/* ===== Theme 3: Alert Red (警示赤红) ===== */
+/* Deep charcoal-red background, crimson accent, amber-yellow complement */
+:root[data-theme='alert'] {
+  --sc-bg-primary: #1a0808;
+  --sc-bg-secondary: #2a1010;
+  --sc-bg-panel: rgba(42, 16, 16, 0.55);
+  --sc-bg-panel-solid: #240e0e;
+  --sc-bg-overlay: rgba(26, 8, 8, 0.85);
+
+  --sc-cyan: #ff3b3b;
+  --sc-cyan-soft: #ff6b6b;
+  --sc-blue: #c0392b;
+  --sc-blue-deep: #922b21;
+  --sc-magenta: #ffe066;
+  --sc-magenta-soft: #ffec99;
+  --sc-purple: #b03a5e;
+  --sc-gold: #ffb142;
+
+  --sc-success: #2ecc71;
+  --sc-warning: #ffe066;
+  --sc-danger: #ff3b3b;
+  --sc-info: #ff3b3b;
+
+  --sc-text-primary: #fff5f5;
+  --sc-text-secondary: #f0b8b8;
+  --sc-text-tertiary: #a87070;
+  --sc-text-accent: #ff3b3b;
+  --sc-text-magenta: #ffe066;
+
+  --sc-border-cyan: rgba(255, 59, 59, 0.4);
+  --sc-border-soft: rgba(255, 59, 59, 0.18);
+  --sc-divider: rgba(240, 184, 184, 0.12);
+
+  --sc-glow-cyan: 0 0 14px rgba(255, 59, 59, 0.7);
+  --sc-glow-magenta: 0 0 12px rgba(255, 224, 102, 0.6);
+  --sc-glow-blue: 0 0 16px rgba(192, 57, 43, 0.5);
+
+  --sc-glow-bg-1: rgba(255, 59, 59, 0.12);
+  --sc-glow-bg-2: rgba(255, 224, 102, 0.08);
+  --sc-glow-bg-3: rgba(176, 58, 94, 0.06);
+
+  --sc-gradient-cyan-magenta: linear-gradient(90deg, #ff3b3b 0%, #b03a5e 50%, #ffe066 100%);
+  --sc-gradient-panel: linear-gradient(180deg, rgba(255, 59, 59, 0.08) 0%, rgba(42, 16, 16, 0.6) 100%);
+  --sc-gradient-header: linear-gradient(90deg, transparent 0%, rgba(255, 59, 59, 0.28) 50%, transparent 100%);
+}
+
+/* ===== Theme 4: Vital Orange (活力橙黄) ===== */
+/* Deep warm-brown background, orange accent, pink complement */
+:root[data-theme='vital'] {
+  --sc-bg-primary: #1a0f05;
+  --sc-bg-secondary: #2e1d0a;
+  --sc-bg-panel: rgba(46, 29, 10, 0.55);
+  --sc-bg-panel-solid: #241508;
+  --sc-bg-overlay: rgba(26, 15, 5, 0.85);
+
+  --sc-cyan: #ffa726;
+  --sc-cyan-soft: #ffcc80;
+  --sc-blue: #e65100;
+  --sc-blue-deep: #bf360c;
+  --sc-magenta: #ff5c8a;
+  --sc-magenta-soft: #ff8fa8;
+  --sc-purple: #ff7043;
+  --sc-gold: #ffd54f;
+
+  --sc-success: #66bb6a;
+  --sc-warning: #ffa726;
+  --sc-danger: #ef5350;
+  --sc-info: #ffa726;
+
+  --sc-text-primary: #fff8ee;
+  --sc-text-secondary: #ddb088;
+  --sc-text-tertiary: #9a6e48;
+  --sc-text-accent: #ffa726;
+  --sc-text-magenta: #ff5c8a;
+
+  --sc-border-cyan: rgba(255, 167, 38, 0.35);
+  --sc-border-soft: rgba(255, 167, 38, 0.15);
+  --sc-divider: rgba(221, 176, 136, 0.12);
+
+  --sc-glow-cyan: 0 0 12px rgba(255, 167, 38, 0.65);
+  --sc-glow-magenta: 0 0 12px rgba(255, 92, 138, 0.55);
+  --sc-glow-blue: 0 0 16px rgba(230, 81, 0, 0.5);
+
+  --sc-glow-bg-1: rgba(255, 167, 38, 0.1);
+  --sc-glow-bg-2: rgba(255, 92, 138, 0.07);
+  --sc-glow-bg-3: rgba(255, 112, 67, 0.05);
+
+  --sc-gradient-cyan-magenta: linear-gradient(90deg, #ffa726 0%, #ff7043 50%, #ff5c8a 100%);
+  --sc-gradient-panel: linear-gradient(180deg, rgba(255, 167, 38, 0.08) 0%, rgba(46, 29, 10, 0.6) 100%);
+  --sc-gradient-header: linear-gradient(90deg, transparent 0%, rgba(255, 167, 38, 0.25) 50%, transparent 100%);
+}
+
+/* ===== Theme 5: Future Purple (未来紫蓝) ===== */
+/* Deep indigo background, violet accent, magenta complement */
+:root[data-theme='future'] {
+  --sc-bg-primary: #0a0e1f;
+  --sc-bg-secondary: #141a35;
+  --sc-bg-panel: rgba(20, 26, 53, 0.55);
+  --sc-bg-panel-solid: #0e1428;
+  --sc-bg-overlay: rgba(10, 14, 31, 0.85);
+
+  --sc-cyan: #8b5cf6;
+  --sc-cyan-soft: #a78bfa;
+  --sc-blue: #5b21b6;
+  --sc-blue-deep: #3b1078;
+  --sc-magenta: #e879f9;
+  --sc-magenta-soft: #f0abfc;
+  --sc-purple: #7c3aed;
+  --sc-gold: #fbbf24;
+
+  --sc-success: #34d399;
+  --sc-warning: #fbbf24;
+  --sc-danger: #f87171;
+  --sc-info: #8b5cf6;
+
+  --sc-text-primary: #f3eeff;
+  --sc-text-secondary: #c4b5e0;
+  --sc-text-tertiary: #8870a8;
+  --sc-text-accent: #8b5cf6;
+  --sc-text-magenta: #e879f9;
+
+  --sc-border-cyan: rgba(139, 92, 246, 0.35);
+  --sc-border-soft: rgba(139, 92, 246, 0.15);
+  --sc-divider: rgba(196, 181, 224, 0.12);
+
+  --sc-glow-cyan: 0 0 14px rgba(139, 92, 246, 0.65);
+  --sc-glow-magenta: 0 0 12px rgba(232, 121, 249, 0.55);
+  --sc-glow-blue: 0 0 16px rgba(91, 33, 182, 0.5);
+
+  --sc-glow-bg-1: rgba(139, 92, 246, 0.1);
+  --sc-glow-bg-2: rgba(232, 121, 249, 0.07);
+  --sc-glow-bg-3: rgba(124, 58, 237, 0.05);
+
+  --sc-gradient-cyan-magenta: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 50%, #e879f9 100%);
+  --sc-gradient-panel: linear-gradient(180deg, rgba(139, 92, 246, 0.08) 0%, rgba(20, 26, 53, 0.6) 100%);
+  --sc-gradient-header: linear-gradient(90deg, transparent 0%, rgba(139, 92, 246, 0.25) 50%, transparent 100%);
+}

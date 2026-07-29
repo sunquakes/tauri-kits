@@ -19,11 +19,11 @@
   flex-shrink: 0;
 
   &.magenta {
-    box-shadow: 0 0 12px rgba(255, 0, 160, 0.3);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--sc-magenta) 30%, transparent);
   }
 
   &.cyan {
-    box-shadow: 0 0 12px rgba(0, 212, 255, 0.3);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--sc-cyan) 30%, transparent);
   }
 
   &.cyan.small {
@@ -32,11 +32,11 @@
   }
 
   &.green {
-    box-shadow: 0 0 12px rgba(0, 255, 166, 0.3);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--sc-success) 30%, transparent);
   }
 
   &.gold {
-    box-shadow: 0 0 12px rgba(255, 204, 0, 0.3);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--sc-gold) 30%, transparent);
   }
 }
 
@@ -66,22 +66,22 @@
 
 .sc-gauge-circle.magenta .sc-gauge-number {
   color: var(--sc-magenta-soft);
-  text-shadow: 0 0 8px rgba(255, 0, 160, 0.5);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--sc-magenta) 50%, transparent);
 }
 
 .sc-gauge-circle.cyan .sc-gauge-number {
   color: var(--sc-cyan);
-  text-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--sc-cyan) 50%, transparent);
 }
 
 .sc-gauge-circle.green .sc-gauge-number {
   color: var(--sc-success);
-  text-shadow: 0 0 8px rgba(0, 255, 166, 0.5);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--sc-success) 50%, transparent);
 }
 
 .sc-gauge-circle.gold .sc-gauge-number {
   color: var(--sc-gold);
-  text-shadow: 0 0 8px rgba(255, 204, 0, 0.5);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--sc-gold) 50%, transparent);
 }
 
 .sc-gauge-unit {
@@ -98,7 +98,7 @@
 
 .sc-gauge-circle.green .sc-gauge-text {
   color: var(--sc-success);
-  text-shadow: 0 0 8px rgba(0, 255, 166, 0.5);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--sc-success) 50%, transparent);
 }
 
 .sc-gauge-label {
