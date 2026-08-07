@@ -1,15 +1,10 @@
-import { createHashRouter } from 'react-router-dom'
-import Dashboard from '../components/dashboard/Dashboard'
-import ChartsOverview from '../components/chart/ChartsOverview'
+import { createBrowserRouter } from 'react-router-dom'
+import Home from '../components/Home'
 
-const router = createHashRouter([
+const router = createBrowserRouter([
   {
     path: '/',
-    element: <Dashboard />
-  },
-  {
-    path: '/charts',
-    element: <ChartsOverview />
+    element: <Home />
   }
 ])
 

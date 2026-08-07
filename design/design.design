@@ -9,7 +9,14 @@
       "canvasData": {
         "x": 0,
         "y": 0,
-        "group": 0
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 900,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-2bf64404",
+          "measuredAt": 1785747594357
+        }
       },
       "devMetadata": {
         "htmlSrc": "pages/dashboard.html",
@@ -25,7 +32,14 @@
       "canvasData": {
         "x": 620,
         "y": 0,
-        "group": 0
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 900,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-461d4af6",
+          "measuredAt": 1785747594357
+        }
       },
       "devMetadata": {
         "htmlSrc": "pages/charts.html",
@@ -36,6 +50,7 @@
   "config": {
     "autoLayout": true,
     "deviceType": "desktop",
-    "projectName": "城市运行态势监测平台"
+    "projectName": "城市运行态势监测平台",
+    "visualEditorEnabled": true
   }
 }

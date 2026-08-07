@@ -1,38 +1,15 @@
 import ReactECharts from 'echarts-for-react'
+import { buildPieOption } from '../../../shared/chart/core'
+import { LIGHT_THEME } from '../../../shared/chart/types'
+import type { PieChartProps } from '../../../shared/chart/types'
 
-interface PieProps {
-  data: any[]
+export type { PieChartProps } from '../../../shared/chart/types'
+
+interface AdminPieProps extends PieChartProps {
+  height?: number | string
 }
 
-export default function Pie({ data }: PieProps) {
-  const option = {
-    title: {
-      text: 'Pie Chart',
-      left: 'center'
-    },
-    tooltip: {
-      trigger: 'item'
-    },
-    legend: {
-      orient: 'vertical',
-      left: 'left'
-    },
-    series: [
-      {
-        name: 'Access From',
-        type: 'pie',
-        radius: '50%',
-        data: data,
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
-          }
-        }
-      }
-    ]
-  }
-
-  return <ReactECharts option={option} style={{ height: '400px' }} />
+export default function Pie({ height = 400, ...chartProps }: AdminPieProps) {
+  const option = buildPieOption(chartProps, LIGHT_THEME)
+  return <ReactECharts option={option} style={{ height: typeof height === 'number' ? `${height}px` : height }} />
 }

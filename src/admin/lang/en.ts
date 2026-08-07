@@ -111,5 +111,17 @@ export default {
     total: 'Total: {{count}}',
     filtered: 'Filtered: {{count}}',
     no_results: 'No icons found for "{{keyword}}"'
+  },
+  chart: {
+    pie_title: 'Pie Chart',
+    bar_title: 'Bar Chart',
+    line_title: 'Line Chart',
+    radar_title: 'Radar Chart',
+    polar_title: 'Polar Chart',
+    single_bar_title: 'Single Bar',
+    multi_bar_title: 'Multi Bar',
+    single_line_title: 'Single Line',
+    multi_line_title: 'Multi Line',
+    area_line_title: 'Area Line'
   }
 }

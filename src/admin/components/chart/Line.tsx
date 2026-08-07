@@ -1,42 +1,15 @@
 import ReactECharts from 'echarts-for-react'
+import { buildLineOption } from '../../../shared/chart/core'
+import { LIGHT_THEME } from '../../../shared/chart/types'
+import type { LineChartProps } from '../../../shared/chart/types'
 
-interface LineProps {
-  data: {
-    xAxis: string[]
-    legend: string[]
-    series: Array<{
-      name: string
-      type: string
-      stack: string
-      data: number[]
-    }>
-  }
+export type { LineChartProps } from '../../../shared/chart/types'
+
+interface AdminLineProps extends LineChartProps {
+  height?: number | string
 }
 
-export default function Line({ data }: LineProps) {
-  const option = {
-    title: {
-      text: 'Line Chart',
-      left: 'center'
-    },
-    tooltip: {
-      trigger: 'axis'
-    },
-    legend: {
-      data: data.legend
-    },
-    xAxis: {
-      type: 'category',
-      data: data.xAxis
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: data.series.map(s => ({
-      ...s,
-      smooth: true
-    }))
-  }
-
-  return <ReactECharts option={option} style={{ height: '400px' }} />
+export default function Line({ height = 400, ...chartProps }: AdminLineProps) {
+  const option = buildLineOption(chartProps, LIGHT_THEME)
+  return <ReactECharts option={option} style={{ height: typeof height === 'number' ? `${height}px` : height }} />
 }

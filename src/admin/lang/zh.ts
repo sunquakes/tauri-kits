@@ -111,5 +111,17 @@ export default {
     total: '总计：{{count}}',
     filtered: '筛选：{{count}}',
     no_results: '未找到 "{{keyword}}" 相关图标'
+  },
+  chart: {
+    pie_title: '饼图',
+    bar_title: '柱状图',
+    line_title: '折线图',
+    radar_title: '雷达图',
+    polar_title: '极坐标图',
+    single_bar_title: '单柱图',
+    multi_bar_title: '多柱图',
+    single_line_title: '单折线图',
+    multi_line_title: '多折线图',
+    area_line_title: '面积图'
   }
 }

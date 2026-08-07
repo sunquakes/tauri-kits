@@ -70,7 +70,7 @@ export default function ChartsOverview() {
           className="span2"
           categories={districts}
           series={[
-            { data: [820, 950, 610, 540, 480, 420], colors: [alpha('--sc-magenta', 0.85), alpha('--sc-cyan', 0.85)] }
+            { data: [820, 950, 610, 540, 480, 420], gradient: [alpha('--sc-magenta', 0.85), alpha('--sc-cyan', 0.85)] }
           ]}
         />
 
@@ -172,7 +172,7 @@ export default function ChartsOverview() {
             t('charts.district_cy')
           ]}
           series={[
-            { data: [6, 9, 12, 15, 18, 22, 28, 36], colors: [alpha('--sc-magenta', 0.95), alpha('--sc-purple', 0.6)] }
+            { data: [6, 9, 12, 15, 18, 22, 28, 36], gradient: [alpha('--sc-magenta', 0.95), alpha('--sc-purple', 0.6)] }
           ]}
         />
 
