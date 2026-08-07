@@ -13,3 +13,4 @@ export default function Bar({ height = 400, ...chartProps }: AdminBarProps) {
   const option = buildBarOption(chartProps, LIGHT_THEME)
   return <ReactECharts option={option} style={{ height: typeof height === 'number' ? `${height}px` : height }} />
 }
+

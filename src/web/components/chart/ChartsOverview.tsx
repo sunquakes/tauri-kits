@@ -13,8 +13,9 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import Header from '../dashboard/Header'
 import ThemeToggle from '../dashboard/ThemeToggle'
-import Bar from './Bar'
-import Line from './Line'
+import SingleBar from './SingleBar'
+import SingleLine from './SingleLine'
+import MultiLine from './MultiLine'
 import Pie from './Pie'
 import Radar from './Radar'
 import Polar from './Polar'
@@ -63,25 +64,23 @@ export default function ChartsOverview() {
 
       <div className="sc-charts-grid">
         {/* 柱状图 — 区域能耗对比 */}
-        <Bar
+        <SingleBar
           icon={<BarChartOutlined style={{ fontSize: 13, color: 'var(--sc-cyan)' }} />}
           title={t('charts.energy_comparison')}
           tag={t('charts.tag_energy')}
           className="span2"
           categories={districts}
-          series={[
-            { data: [820, 950, 610, 540, 480, 420], gradient: [alpha('--sc-magenta', 0.85), alpha('--sc-cyan', 0.85)] }
-          ]}
+          data={[820, 950, 610, 540, 480, 420]}
+          gradient={[alpha('--sc-magenta', 0.85), alpha('--sc-cyan', 0.85)]}
         />
 
         {/* 折线图 — 人口流动趋势 */}
-        <Line
+        <MultiLine
           icon={<RiseOutlined style={{ fontSize: 13, color: 'var(--sc-cyan)' }} />}
           title={t('charts.population_trend')}
           tag={t('charts.tag_wan_person')}
           className="span2"
           categories={months}
-          showLegend
           series={[
             { name: t('charts.inflow'), data: [32, 28, 35, 42, 48, 55, 60, 58, 52, 46, 40, 36], color: c.cyan },
             { name: t('charts.outflow'), data: [28, 30, 32, 38, 44, 50, 56, 54, 48, 42, 38, 34], color: c.magenta, dashed: true }
@@ -125,13 +124,16 @@ export default function ChartsOverview() {
         />
 
         {/* 折线图（面积）— 空气质量趋势 */}
-        <Line
+        <SingleLine
           icon={<AreaChartOutlined style={{ fontSize: 13, color: 'var(--sc-cyan)' }} />}
           title={t('charts.air_quality_trend')}
           tag={t('charts.tag_pm25')}
           className="span2"
           categories={weekdays}
-          series={[{ name: 'PM2.5', data: [45, 38, 52, 60, 48, 35, 42], color: c.cyan, area: true }]}
+          data={[45, 38, 52, 60, 48, 35, 42]}
+          name="PM2.5"
+          color={c.cyan}
+          area
         />
 
         {/* 饼图（环形）— 交通方式构成 */}
@@ -153,7 +155,7 @@ export default function ChartsOverview() {
         />
 
         {/* 柱状图（水平）— 各区事件预警数 */}
-        <Bar
+        <SingleBar
           icon={<BarChartOutlined style={{ fontSize: 13, color: 'var(--sc-magenta-soft)' }} />}
           title={t('charts.alert_by_district')}
           tag={t('charts.tag_alert')}
@@ -171,9 +173,8 @@ export default function ChartsOverview() {
             t('charts.district_hd'),
             t('charts.district_cy')
           ]}
-          series={[
-            { data: [6, 9, 12, 15, 18, 22, 28, 36], gradient: [alpha('--sc-magenta', 0.95), alpha('--sc-purple', 0.6)] }
-          ]}
+          data={[6, 9, 12, 15, 18, 22, 28, 36]}
+          gradient={[alpha('--sc-magenta', 0.95), alpha('--sc-purple', 0.6)]}
         />
 
         {/* 极坐标图 — 噪声分布 */}

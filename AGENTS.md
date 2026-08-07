@@ -116,6 +116,28 @@ Rules:
 - Sub-menu items (like User under System) should show the parent category first, then the sub-item.
 - Always use i18n keys — never hardcode strings.
 
+### Chart Components
+
+Chart components are organized in `src/<app>/components/chart/` where `<app>` is `admin` or `web`.
+
+**Naming Convention:**
+- **Base components**: `Bar.tsx`, `Line.tsx`, `Pie.tsx`, `Radar.tsx`, `Polar.tsx` — accept `series: DataSeries[]` (array of series)
+- **Single-series wrappers**: `SingleBar.tsx`, `SingleLine.tsx` — accept `data: number[]` (single array), internally convert to `series`
+- **Multi-series wrappers**: `MultiBar.tsx`, `MultiLine.tsx` — accept `series: DataSeries[]`, pass through to base component
+
+**Usage Rules:**
+- Use `SingleBar` / `SingleLine` when you have a single data array (convenience shorthand)
+- Use `MultiBar` / `MultiLine` when you have multiple named series with legend
+- Use base `Bar` / `Line` directly only if you need custom series configuration not covered by wrappers
+- Both `admin` and `web` must have the same chart component names for consistency
+- Web wrappers include additional props: `icon`, `tag`, `tagColor`, `className`, `variant`
+- Admin wrappers are simpler, only adding `height` prop
+
+**Shared Core:**
+- `src/shared/chart/types.ts` — data interfaces (`DataSeries`, `BarChartProps`, etc.)
+- `src/shared/chart/core.ts` — option builders (`buildBarOption`, `buildLineOption`, etc.)
+- Both admin and web delegate to these shared builders, passing their respective theme
+
 ---
 
 ## 4. Adding a New Module — Step-by-Step
