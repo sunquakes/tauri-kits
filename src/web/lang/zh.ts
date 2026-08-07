@@ -8,5 +8,8 @@ export default {
   },
   status: {
     developing: '前台模块开发中...'
+  },
+  lang: {
+    switch: '切换语言'
   }
 }

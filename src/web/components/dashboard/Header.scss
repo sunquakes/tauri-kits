@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿@use './variables.scss' as *;
+@use './variables.scss' as *;
 
 /* === Header === */
 .sc-header {
@@ -89,4 +89,32 @@
   margin: 2px 0 0 0;
   letter-spacing: 4px;
   white-space: nowrap;
+}
+
+/* === Language Switch Button === */
+.sc-lang-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 28px;
+  padding: 0 8px;
+  font-family: var(--sc-font-sans);
+  font-size: var(--sc-fs-caption);
+  font-weight: var(--sc-fw-semibold);
+  color: var(--sc-text-secondary);
+  letter-spacing: 0.5px;
+  background: color-mix(in srgb, var(--sc-text-secondary) 6%, transparent);
+  border: 1px solid var(--sc-border-soft);
+  border-radius: var(--sc-radius-sm);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--sc-text-primary);
+    background: color-mix(in srgb, var(--sc-text-secondary) 12%, transparent);
+    border-color: var(--sc-cyan);
+    box-shadow: var(--sc-glow-cyan);
+  }
 }

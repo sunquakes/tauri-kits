@@ -8,5 +8,8 @@ export default {
   },
   status: {
     developing: 'Frontend module under development...'
+  },
+  lang: {
+    switch: 'Switch Language'
   }
 }

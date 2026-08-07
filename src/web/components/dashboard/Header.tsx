@@ -2,7 +2,12 @@ import { useTranslation } from 'react-i18next'
 import './Header.scss'
 
 export default function Header() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+
+  const toggleLang = () => {
+    const next = i18n.language === 'zh' ? 'en' : 'zh'
+    i18n.changeLanguage(next)
+  }
 
   return (
     <header className="sc-header">
@@ -20,6 +25,9 @@ export default function Header() {
         <p className="sc-header-subtitle">{t('dashboard.subtitle')}</p>
       </div>
       <div className="sc-header-deco right">
+        <button className="sc-lang-btn" onClick={toggleLang} title={t('lang.switch')}>
+          {i18n.language === 'zh' ? 'EN' : '中'}
+        </button>
         <span className="deco-bar"></span>
         <span className="deco-line"></span>
         <span className="deco-diamond"></span>
